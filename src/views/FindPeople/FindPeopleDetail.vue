@@ -96,7 +96,7 @@ export default {
   mounted() {
     this.schedule = this.$store.state.schedule
     this.$nextTick(function () {
-      if (this.schedule.scheduleId) {
+      if (!this.schedule.scheduleId) {
         this.schedule.scheduleId = this.scheduleId
       }
       this.ref = this.$firebase

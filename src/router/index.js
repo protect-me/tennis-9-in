@@ -1,17 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import store from '@/store'
+import firebase from '../plugins/firebase.js'
 
 Vue.use(VueRouter)
 
 const onlyAuthUser = (to, from, next) => {
-  if (store.state.fireUser) {
-    next()
-  } else {
-    alert('로그인을 해주세요 🎾')
-    router.push('Mypage')
-  }
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      next()
+    } else {
+      alert('로그인을 해주세요 🎾')
+      router.push('Mypage')
+    }
+  })
 }
 
 // const onlyAuthUserForMypage = (to, from, next) => {
@@ -70,11 +72,6 @@ const routes = [
     name: 'FindPeopleDetail',
     beforeEnter: onlyAuthUser,
     component: () => import('../views/FindPeople/FindPeopleDetail.vue'),
-  },
-  {
-    path: '/findcourt',
-    name: 'FindCourt',
-    component: () => import('../views/FindCourt.vue'),
   },
   {
     path: '/mypage',
