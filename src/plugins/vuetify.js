@@ -19,8 +19,10 @@ const theme = {
       // error: "#F24C3D",
       // background: "#f9f9f9",
 
-      primary: '#485c60', //'rgba(72,92,96)'
-      secondary: '#667456', // 'rgba(102,116,86)',
+      // primary: '#485c60', //'rgba(72, 92, 96)'
+      // secondary: '#667456', // 'rgba(102, 116, 86)',
+      primary: '#6e8486', //'rgba(110, 132, 134, 1)'
+      secondary: '#849372', // 'rgba(132, 147, 114, 1)'
 
       accent: '#ecb558',
       info: '#4E7DA6',
