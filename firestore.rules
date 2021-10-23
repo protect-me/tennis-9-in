@@ -1,6 +1,100 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function approveLevel(level) {
+      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.level <= level;
+    }
+    function updateUsersOnlyAssociatedWithFindPeople(before, after) {
+      return before.email == after.email &&
+        before.displayName == after.displayName &&
+        before.photoURL == after.photoURL &&
+        before.nickName == after.nickName &&
+        before.sex == after.sex &&
+        before.birth == after.birth &&
+        before.location == after.location &&
+        before.ntrp == after.ntrp &&
+        before.createdAt == after.createdAt &&
+        before.updatedAt == after.updatedAt &&
+        before.level == after.level
+    }
+
+    function updateFindPeopleOnlyAssociatedWithApplicant(before, after) {
+      return before.organizer == after.organizer &&
+        before.organizerNickName == after.organizerNickName &&
+        before.courtName == after.courtName &&
+        before.courtType == after.courtType &&
+        before.date == after.date &&
+        before.startTime == after.startTime &&
+        before.endTime == after.endTime &&
+        before.ntrp == after.ntrp &&
+        before.total == after.total &&
+        before.assignment == after.assignment &&
+        before.openChatLink == after.openChatLink &&
+        before.contact == after.contact &&
+        before.cost == after.cost &&
+        before.memo == after.memo &&
+        before.createdAt == after.createdAt &&
+        before.updatedAt == after.updatedAt &&
+        before.status == after.status
+    }
+
+    match /users/{userId}/FindCourtAlert/{findCourtAlertId} {
+      allow create: if request.auth != null;
+      allow read: if approveLevel(0)
+        || request.auth != null && request.auth.uid == userId;
+      allow update: if false;
+      allow delete: if approveLevel(0)
+        || request.auth != null && request.auth.uid == userId;
+    }
+
+    match /users/{userId}/FindPeopleAlert/{findPeopleAlertId} {
+      allow create: if request.auth != null;
+      allow read: if approveLevel(0)
+        || request.auth != null && request.auth.uid == userId;
+      allow update: if false;
+      allow delete: if approveLevel(0)
+        || request.auth != null && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow create : if false; // functions
+      allow read: if request.auth != null;
+      allow update: if approveLevel(0)
+        || (request.auth != null && request.auth.uid == userId && resource.data.level == request.resource.data.level)
+        || (request.auth != null && updateUsersOnlyAssociatedWithFindPeople(resource.data, request.resource.data));
+      allow delete : if false; // functions
+    }
+    
+    match /courts/{courtId} {
+      allow create: if request.auth != null;
+      allow read: if true;
+      allow update: if approveLevel(0);
+      allow delete: if approveLevel(0);
+    }
+
+    match /reports/{reportId} {
+      allow create: if request.auth != null;
+      allow read: if approveLevel(0) || request.auth.uid == resource.data.userId;
+      allow update: if approveLevel(0) || (request.auth != null && resource.data.userId == request.auth.uid);
+      allow delete: if approveLevel(0) || (request.auth != null && resource.data.userId == request.auth.uid);
+    }
+
+    match /findPeople/{scheduleId}/applicants/{applicantsId} {
+      allow create: if request.auth != null;
+      allow read: if true;
+      allow update: if approveLevel(0) || request.auth != null;
+      allow delete: if approveLevel(0) || (request.auth != null && request.auth.uid == applicantsId);
+    }
+
+    match /findPeople/{scheduleId} {
+      allow create: if request.auth != null;
+      allow read: if true;
+      allow update: if approveLevel(0)
+        || (request.auth != null && resource.data.organizer == request.auth.uid)
+        || (request.auth != null && updateFindPeopleOnlyAssociatedWithApplicant(resource.data, request.resource.data));
+      allow delete: if approveLevel(0);
+    }
+
     match /{document=**} {
       allow read, write: if
           request.time < timestamp.date(2021, 10, 17);
