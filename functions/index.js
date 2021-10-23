@@ -12,7 +12,7 @@ const fdb = admin.firestore()
 
 exports.createUser = functions.auth.user().onCreate(async (user) => {
   const { uid, email, displayName, photoURL } = user
-  const time = new Date()
+  const time = Date.now()
   const userInfo = {
     email,
     displayName,
@@ -23,16 +23,15 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
     location: '',
     ntrp: 0,
     createdAt: time,
+    updatedAt: time,
     level: email == functions.config().admin.email ? 0 : 5,
     findPeopleList: [],
     applicationList: [],
     participationList: [],
     alertApplicationToggle: false,
     alertParticipationToggle: false,
-    updateNickName: false,
   }
   await fdb.collection('users').doc(uid).set(userInfo) // set user at Firestore
-  userInfo.createdAt = time.getTime()
   db.ref('users').child(uid).set(userInfo) // set user at RealTime Database
 })
 
@@ -49,6 +48,7 @@ exports.deleteUser = functions.auth.user().onDelete(async (user) => {
 // 3: 게스트 영입
 // 4: 게스트 방출
 
+// 게스트 참여 요청
 exports.createApplicants = functions.firestore
   .document('findPeople/{scheduleId}/applicants/{applicantsId}')
   .onCreate(async (snap, context) => {
@@ -94,6 +94,7 @@ exports.createApplicants = functions.firestore
     }
   })
 
+// 게스트 참여 요청 취소
 exports.deleteApplicants = functions.firestore
   .document('findPeople/{scheduleId}/applicants/{applicantsId}')
   .onDelete(async (snap, context) => {
@@ -135,6 +136,7 @@ exports.deleteApplicants = functions.firestore
     }
   })
 
+// 영입 및 방출
 exports.updateParticipants = functions.firestore
   .document('findPeople/{scheduleId}')
   .onUpdate(async (change, context) => {

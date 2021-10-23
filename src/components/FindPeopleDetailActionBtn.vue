@@ -235,7 +235,7 @@ export default {
       this.applyDialogToggle = false
     },
     async registApplicant() {
-      if (this.user && !this.user.updateNickName) {
+      if (this.user && this.user.createdAt === this.user.updatedAt) {
         alert('회원 정보를 확인해주세요!')
         this.$router.push({ name: 'Mypage' })
         return

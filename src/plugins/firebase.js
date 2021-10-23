@@ -8,7 +8,8 @@ import 'firebase/firebase-database'
 import 'firebase/firebase-firestore'
 import 'firebase/firebase-storage'
 
-firebase.initializeApp(firebaseConfig)
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig)
+
 let unsubscribe = null
 
 Vue.prototype.$firebase = firebase
