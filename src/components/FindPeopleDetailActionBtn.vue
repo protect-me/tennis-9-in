@@ -236,7 +236,7 @@ export default {
     },
     async registApplicant() {
       if (this.user && this.user.createdAt === this.user.updatedAt) {
-        alert('회원 정보를 확인해주세요!')
+        alert('로그인이 필요해요 🎾')
         this.$router.push({ name: 'Mypage' })
         return
       }

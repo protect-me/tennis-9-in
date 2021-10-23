@@ -3,9 +3,7 @@
     <v-app-bar dark dense max-height="48px">
       <v-toolbar-title>
         <router-link to="/" class="white--text" style="text-decoration: none;">
-          <div class="pr-2">
-            🎾
-          </div>
+          <div class="pr-2 title"><span>🎾</span></div>
         </router-link>
       </v-toolbar-title>
 
@@ -100,8 +98,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .not-active {
   color: grey;
+}
+.v-toolbar__title title {
+  font-size: 1rem !important;
 }
 </style>

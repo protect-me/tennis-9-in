@@ -2,7 +2,12 @@
   <v-container class="home-container">
     <v-card flat>
       <v-card-title>
-        Tennis-9-In OPEN 🎉
+        <!-- 테니스구인 오픈 🎉 -->
+        <img
+          class="main-img"
+          src="https://media.vlpt.us/images/protect-me/post/526de137-5aee-4710-90e9-2107c9c784c4/tennis.jpeg"
+          alt="테니스구인"
+        />
       </v-card-title>
       <v-divider class="mb-5"></v-divider>
     </v-card>
@@ -66,9 +71,12 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="scss" scoped>
 .home-container {
   height: calc(100vh - 48px);
   overflow: scroll;
+}
+.main-img {
+  width: 100%;
 }
 </style>
