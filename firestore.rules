@@ -94,10 +94,5 @@ service cloud.firestore {
         || (request.auth != null && updateFindPeopleOnlyAssociatedWithApplicant(resource.data, request.resource.data));
       allow delete: if approveLevel(0);
     }
-
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2021, 10, 17);
-    }
   }
 }
