@@ -221,10 +221,12 @@ export default {
         this.$router.push({ name: 'EditUserInfo' })
       }
     },
-    logout() {
+    async logout() {
       const answer = window.confirm('로그아웃 하시겠습니까?')
       if (answer) {
         this.$firebase.auth().signOut()
+        await this.$store.dispatch('setUser', null)
+        await this.$store.dispatch('setFireUser', null)
         alert('로그아웃 되었습니다')
       }
     },
