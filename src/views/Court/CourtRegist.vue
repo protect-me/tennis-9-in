@@ -284,7 +284,7 @@ export default {
     },
     async registNewCourt() {
       try {
-        this.form.this.form.createdAt = new Date()
+        this.form.createdAt = new Date()
         const id = this.form.createdAt.getTime().toString()
         this.form.courtId = id
 

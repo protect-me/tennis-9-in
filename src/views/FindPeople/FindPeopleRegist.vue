@@ -25,7 +25,7 @@
         <v-card-text class="pa-2">
           <div>Notice.</div>
           <div>1. 시간 오전/오후 필수 확인 🎾</div>
-          <div>2. 분 단위 '내림' 처리(e.g. 47분 ⇒ 40분)</div>
+          <div>2. 분 단위 내림 처리(e.g. 47분 ⇒ 40분)</div>
           <div>3. 전화번호 등 민감한 정보 기입 지양</div>
         </v-card-text>
       </v-card>

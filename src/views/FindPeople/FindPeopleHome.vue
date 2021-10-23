@@ -106,7 +106,7 @@ export default {
       }
     },
     moveToRegist() {
-      if (this.user && this.user.updateNickName) {
+      if (this.user && this.user.createdAt !== this.user.updatedAt) {
         this.$router.push({ name: 'FindPeopleRegist' })
       } else {
         alert('회원 정보를 확인해주세요!')

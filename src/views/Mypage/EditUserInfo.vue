@@ -16,7 +16,7 @@
               <span>
                 Notice.
                 <br />
-                닉네임은 첫 회원 정보 수정 시에만 변경 가능합니다 🎾
+                닉네임은 첫 회원 정보 수정 시, 단 한 번 변경 가능 🎾
               </span>
             </v-card-subtitle>
           </v-card>
@@ -24,8 +24,8 @@
             v-model="form.nickName"
             label="닉네임"
             type="text"
-            :disabled="form.updateNickName"
-            :readonly="form.updateNickName"
+            :disabled="form.createdAt !== form.updatedAt"
+            :readonly="form.createdAt !== form.updatedAt"
             outlined
             :rules="[rules.required, rules.counter10, rules.banGhost]"
           />
@@ -123,10 +123,11 @@ export default {
         this.moveToMypage()
       } else {
         const info = this.$store.state.user
-        this.form.updateNickName = info.updateNickName
         this.form.nickName = info.nickName
         this.form.birth = info.birth
         this.form.location = info.location
+        this.form.createdAt = info.createdAt
+        this.form.updatedAt = info.updatedAt
         this.selectedNtrp = Number(info.ntrp) * 2 - 1 || 7
         this.sex = Number(info.sex)
       }
@@ -169,6 +170,7 @@ export default {
         birth: '',
         location: '',
         ntrp: 0,
+        createdAt: '',
         updatedAt: '',
       },
       valid: false,
@@ -218,7 +220,6 @@ export default {
     },
     async updateUserInfo() {
       try {
-        this.form.updateNickName = true
         this.form.updatedAt = Date.now()
         await this.$firebase
           .firestore()
