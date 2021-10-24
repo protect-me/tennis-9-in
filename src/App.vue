@@ -2,9 +2,7 @@
   <v-app>
     <Header></Header>
     <v-main>
-      <!-- <transition name="fade"> -->
       <router-view />
-      <!-- </transition> -->
     </v-main>
   </v-app>
 </template>
@@ -15,20 +13,17 @@ export default {
   components: {
     Header,
   },
-  mounted() {},
-  data() {
-    return {}
+  mounted() {
+    const theme = localStorage.getItem('Tennis9InDarkTheme')
+    if (theme) {
+      if (theme == 'true') {
+        this.$vuetify.theme.dark = true
+      } else {
+        this.$vuetify.theme.dark = false
+      }
+    }
   },
 }
 </script>
 
-<style scoped lang="scss">
-/* .fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-} */
-</style>
+<style scoped lang="scss"></style>
