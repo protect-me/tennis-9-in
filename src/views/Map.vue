@@ -174,7 +174,8 @@ export default {
   height: 100%;
 }
 #map {
-  width: 100%;
+  margin-top: 5px;
+  width: calc(100% - 5px);
   height: 100%;
   .customoverlay {
     .customoverlay-count {

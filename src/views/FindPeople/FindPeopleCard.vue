@@ -223,10 +223,10 @@ export default {
   }
 }
 .fontBlue {
-  color: #3f51b5;
+  color: #5c6bc0;
 }
 .fontRed {
-  color: #f44336;
+  color: #ef5350;
 }
 .fontGreen {
   color: #8bc34a;

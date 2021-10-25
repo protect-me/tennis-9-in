@@ -1,137 +1,139 @@
 <template>
-  <v-container class="court-regist-container">
-    <div class="court-regist-header">
-      <TitleWithButton
-        titleText="신규 코트 등록"
-        goBackButton
-        @goBackButtonClicked="goBackButtonClicked"
-      />
-    </div>
-    <v-divider class="my-3"></v-divider>
-    <v-card flat class="court-regist-content">
-      <v-form ref="form" v-model="valid" lazy-validation>
-        <div class="subtitle mb-3">
-          <span>
-            타입 선택
-          </span>
-          <span style="font-size: 12px; color: gray;">
-            *복수 선택 가능
-          </span>
-        </div>
-        <v-btn-toggle
-          class="type-section"
-          v-model="form.types"
-          group
-          multiple
-          color="primary"
-        >
-          <v-btn
-            v-for="(type, index) of typeGroup"
-            :key="index"
-            :value="type.value"
-            class="mr-4"
+  <v-card class="court-regist-container">
+    <v-card-text>
+      <div class="court-regist-header">
+        <TitleWithButton
+          titleText="신규 코트 등록"
+          goBackButton
+          @goBackButtonClicked="goBackButtonClicked"
+        />
+      </div>
+      <v-divider class="my-3"></v-divider>
+      <v-card flat class="court-regist-content">
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <div class="subtitle mb-3">
+            <span>
+              타입 선택
+            </span>
+            <span style="font-size: 12px; color: gray;">
+              *복수 선택 가능
+            </span>
+          </div>
+          <v-btn-toggle
+            class="type-section"
+            v-model="form.types"
+            group
+            multiple
+            color="primary"
           >
-            <div style="display: flex; flex-direction: column;">
-              <div class="mb-1">
-                {{ type.eng }}
+            <v-btn
+              v-for="(type, index) of typeGroup"
+              :key="index"
+              :value="type.value"
+              class="mr-4"
+            >
+              <div style="display: flex; flex-direction: column;">
+                <div class="mb-1">
+                  {{ type.eng }}
+                </div>
+                <div style="font-size: 12px;">
+                  {{ type.kor }}
+                </div>
               </div>
-              <div style="font-size: 12px;">
-                {{ type.kor }}
-              </div>
-            </div>
-          </v-btn>
-        </v-btn-toggle>
+            </v-btn>
+          </v-btn-toggle>
 
-        <v-divider class="mt-2 mb-3"></v-divider>
+          <v-divider class="mt-2 mb-3"></v-divider>
 
-        <div class="subtitle mb-3">
-          <span>
-            코트 타입 선택
-          </span>
-          <span @click="openCourtTypeHelp">
-            <v-icon small>mdi-help-circle-outline</v-icon>
-          </span>
-        </div>
-        <v-combobox
-          v-model="form.courtTypes"
-          :items="courtTypesItems"
-          multiple
-          chips
-          outlined
-          hide-details
-        ></v-combobox>
+          <div class="subtitle mb-3">
+            <span>
+              코트 타입 선택
+            </span>
+            <span @click="openCourtTypeHelp">
+              <v-icon small>mdi-help-circle-outline</v-icon>
+            </span>
+          </div>
+          <v-combobox
+            v-model="form.courtTypes"
+            :items="courtTypesItems"
+            multiple
+            chips
+            outlined
+            hide-details
+          ></v-combobox>
 
-        <v-divider class="mt-3 mb-3"></v-divider>
+          <v-divider class="mt-3 mb-3"></v-divider>
 
-        <v-text-field
-          class="mb-3"
-          label="코트명"
-          v-model="form.courtName"
-          type="text"
-          outlined
-          hide-details
-          :rules="[rules.required]"
-        />
-        <v-text-field
-          class="mb-3"
-          label="주소"
-          v-model="form.address"
-          @click="openAddressDialog"
-          readonly
-          type="text"
-          outlined
-          hide-details
-          :rules="[rules.required]"
-        />
-        <v-textarea
-          label="메모"
-          v-model="form.memo"
-          type="text"
-          outlined
-          counter="100"
-          no-resize
-        />
-      </v-form>
-    </v-card>
-    <v-spacer></v-spacer>
-    <v-btn
-      class="compelete-btn"
-      block
-      color="primary"
-      @click="apply"
-      :disabled="isProcessing"
-      :loading="isProcessing"
-    >
-      신규 등록
-    </v-btn>
-
-    <v-dialog v-if="addressDialogToggle" v-model="addressDialogToggle">
-      <VueDaumPostcode @complete="addressSelected($event)"></VueDaumPostcode>
-      <v-btn block color="error" @click="addressDialogToggle = false">
-        close
+          <v-text-field
+            class="mb-3"
+            label="코트명"
+            v-model="form.courtName"
+            type="text"
+            outlined
+            hide-details
+            :rules="[rules.required]"
+          />
+          <v-text-field
+            class="mb-3"
+            label="주소"
+            v-model="form.address"
+            @click="openAddressDialog"
+            readonly
+            type="text"
+            outlined
+            hide-details
+            :rules="[rules.required]"
+          />
+          <v-textarea
+            label="메모"
+            v-model="form.memo"
+            type="text"
+            outlined
+            counter="100"
+            no-resize
+          />
+        </v-form>
+      </v-card>
+      <v-spacer></v-spacer>
+      <v-btn
+        class="compelete-btn"
+        block
+        color="primary"
+        @click="apply"
+        :disabled="isProcessing"
+        :loading="isProcessing"
+      >
+        신규 등록
       </v-btn>
-    </v-dialog>
 
-    <v-dialog v-if="courtTypeHelpToggle" v-model="courtTypeHelpToggle">
-      <v-card class="pa-2">
-        <div class="mb-2">
-          <v-chip class="mr-2">추가</v-chip>
-          <span>코트 타입 입력 후 Enter 키 입력</span>
-        </div>
-        <div class="mb-2">
-          <v-chip class="mr-2">삭제</v-chip>
-          <span>Backspace 키 입력</span>
-        </div>
-        <div class="mb-2">
-          <v-chip class="mr-2">선택</v-chip>
-          <span>▾ 버튼 선택 후 체크 및 체크 해제</span>
-        </div>
-        <v-btn block color="error" @click="courtTypeHelpToggle = false">
+      <v-dialog v-if="addressDialogToggle" v-model="addressDialogToggle">
+        <VueDaumPostcode @complete="addressSelected($event)"></VueDaumPostcode>
+        <v-btn block color="error" @click="addressDialogToggle = false">
           close
         </v-btn>
-      </v-card>
-    </v-dialog>
-  </v-container>
+      </v-dialog>
+
+      <v-dialog v-if="courtTypeHelpToggle" v-model="courtTypeHelpToggle">
+        <v-card class="pa-2">
+          <div class="mb-2">
+            <v-chip class="mr-2">추가</v-chip>
+            <span>코트 타입 입력 후 Enter 키 입력</span>
+          </div>
+          <div class="mb-2">
+            <v-chip class="mr-2">삭제</v-chip>
+            <span>Backspace 키 입력</span>
+          </div>
+          <div class="mb-2">
+            <v-chip class="mr-2">선택</v-chip>
+            <span>▾ 버튼 선택 후 체크 및 체크 해제</span>
+          </div>
+          <v-btn block color="error" @click="courtTypeHelpToggle = false">
+            close
+          </v-btn>
+        </v-card>
+      </v-dialog>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -329,7 +331,7 @@ export default {
   display: flex;
   flex-direction: column;
   .court-regist-content {
-    height: calc(100vh - 133px);
+    height: calc(100vh - 180px);
     overflow: scroll;
   }
   .compelete-btn {

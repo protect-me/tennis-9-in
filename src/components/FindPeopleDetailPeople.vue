@@ -31,8 +31,8 @@
           'mb-1': true,
           'mr-1': index % 2 === 0,
           'ml-1': index % 2 === 1,
+          'my-self': participant.userId === fireUser.uid,
         }"
-        :dark="participant.userId === fireUser.uid"
         @click="selectParticipant(participant)"
       >
         <v-card-subtitle class="pt-2 px-2 pb-0">
@@ -274,7 +274,7 @@ export default {
 
 <style lang="scss" scoped>
 .participants-container {
-  width: calc(100vw - 24px);
+  width: calc(100vw - 36px);
   display: flex;
   flex-wrap: wrap;
   .participants-card {
@@ -293,5 +293,8 @@ export default {
   .applicants-card {
     width: calc(50% - 4px);
   }
+}
+.my-self {
+  border: 5px solid #ecb558 !important;
 }
 </style>

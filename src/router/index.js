@@ -54,6 +54,7 @@ const routes = [
   {
     path: '/report',
     name: 'Report',
+    beforeEnter: onlyAuthUser,
     component: () => import('../views/Mypage/Report.vue'),
   },
   {
