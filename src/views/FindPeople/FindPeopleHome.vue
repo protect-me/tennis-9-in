@@ -1,34 +1,30 @@
 <template>
-  <v-card class="find-people-container">
-    <v-card-text>
-      <TitleWithButton
-        titleText="게스트 모집"
-        registNewButton
-        @registNewButtonClicked="moveToRegist"
-      />
-      <v-divider class="my-3"></v-divider>
+  <v-container class="find-people-container">
+    <TitleWithButton
+      titleText="게스트 모집"
+      registNewButton
+      @registNewButtonClicked="moveToRegist"
+    />
+    <v-divider class="my-3"></v-divider>
 
-      <v-tabs v-model="tab" grow color="primary">
-        <v-tab v-for="item in items" :key="item.tab">
-          <span class="mr-2">{{ item.tab }}</span>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-tab>
-      </v-tabs>
-      <v-tabs-items class="tabs-item" v-model="tab" v-if="schedules">
-        <v-tab-item class="tab-item">
-          <FindPeopleOpen :schedules="schedulesOpen"></FindPeopleOpen>
-        </v-tab-item>
-        <v-tab-item class="tab-item">
-          <FindPeopleClose :schedules="schedulesClose"></FindPeopleClose>
-        </v-tab-item>
-        <v-tab-item class="tab-item">
-          <FindPeopleComplete
-            :schedules="schedulesComplete"
-          ></FindPeopleComplete>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-card-text>
-  </v-card>
+    <v-tabs v-model="tab" grow color="primary">
+      <v-tab v-for="item in items" :key="item.tab">
+        <span class="mr-2">{{ item.tab }}</span>
+        <v-icon>{{ item.icon }}</v-icon>
+      </v-tab>
+    </v-tabs>
+    <v-tabs-items class="tabs-item" v-model="tab" v-if="schedules">
+      <v-tab-item class="tab-item">
+        <FindPeopleOpen :schedules="schedulesOpen"></FindPeopleOpen>
+      </v-tab-item>
+      <v-tab-item class="tab-item">
+        <FindPeopleClose :schedules="schedulesClose"></FindPeopleClose>
+      </v-tab-item>
+      <v-tab-item class="tab-item">
+        <FindPeopleComplete :schedules="schedulesComplete"></FindPeopleComplete>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-container>
 </template>
 
 <script>
@@ -126,13 +122,12 @@ export default {
 .find-people-container {
   height: calc(100vh - 48px);
   .v-tabs-items {
-    /* padding: 0px 2px; */
-    height: calc(100vh - 190px);
+    padding: 0px 2px;
+    height: calc(100vh - 180px);
     overflow: scroll;
     .tab-item {
       padding-top: 10px;
     }
   }
 }
-/* } */
 </style>

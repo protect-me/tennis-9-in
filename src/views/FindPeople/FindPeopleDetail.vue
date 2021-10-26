@@ -1,80 +1,78 @@
 <template>
-  <v-card
+  <v-container
     class="find-people-detail-container"
     v-if="subscribedSchedule && subscribedSchedule.scheduleId"
   >
-    <v-card-text>
-      <div class="find-people-detail-header">
-        <TitleWithButton
-          titleText="게스트 모집 상세"
-          goBackButton
-          :editButton="
-            fireUser.uid === subscribedSchedule.organizer &&
-            subscribedSchedule.status === 1
-          "
-          :icon="titleIcon"
-          @editButtonClicked="editButtonClicked"
-          @goBackButtonClicked="goBackButtonClicked"
-        />
-        <v-divider class="my-3"></v-divider>
-      </div>
-
-      <div class="find-people-detail-content">
-        <v-card flat v-if="subscribedSchedule.status === 9">
-          <v-card-text class="text--black py-2" style="color: #f44336;">
-            Notice. 삭제된 모집입니다 🎾
-          </v-card-text>
-        </v-card>
-        <FindPeopleCard :schedule="subscribedSchedule" mode="detail" />
-        <v-card v-if="subscribedSchedule.status !== 3">
-          <v-card-text>
-            <div v-if="subscribedSchedule.contact" class="mb-1">
-              <span @click="copyContact">
-                <v-icon class="mr-2 mb-1" small>mdi-cellphone-message</v-icon>
-                <span>{{ subscribedSchedule.contact }}</span>
-                <v-icon class="ml-2 mb-1" small color="primary">
-                  mdi-content-copy
-                </v-icon>
-              </span>
-            </div>
-            <div v-if="subscribedSchedule.openChatLink">
-              <v-icon class="mr-2" small>mdi-forum-outline</v-icon>
-              <a :href="subscribedSchedule.openChatLink" target="_blank">
-                <span>{{ subscribedSchedule.openChatLink }}</span>
-              </a>
-            </div>
-          </v-card-text>
-        </v-card>
-
-        <FindPeopleDetailPeople
-          :subscribedSchedule="subscribedSchedule"
-          :participants="participants"
-          :applicants="applicants"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <FindPeopleDetailActionBtn
-        :subscribedSchedule="subscribedSchedule"
-        :applicants="applicants"
-        :applicantsUserIdList="applicantsUserIdList"
-        ref="findPeopleActions"
+    <div class="find-people-detail-header">
+      <TitleWithButton
+        titleText="게스트 모집 상세"
+        goBackButton
+        :editButton="
+          fireUser.uid === subscribedSchedule.organizer &&
+          subscribedSchedule.status === 1
+        "
+        :icon="titleIcon"
+        @editButtonClicked="editButtonClicked"
+        @goBackButtonClicked="goBackButtonClicked"
       />
+      <v-divider class="my-3"></v-divider>
+    </div>
 
-      <v-bottom-sheet
-        v-if="editDialogToggle"
-        v-model="editDialogToggle"
-        fullscreen
-      >
-        <FindPeopleRegist
-          :subscribedSchedule="subscribedSchedule"
-          mode="edit"
-          @closeButtonClicked="closeEditDialog"
-        />
-      </v-bottom-sheet>
-    </v-card-text>
-  </v-card>
+    <div class="find-people-detail-content">
+      <v-card flat v-if="subscribedSchedule.status === 9">
+        <v-card-text class="text--black py-2" style="color: #f44336;">
+          Notice. 삭제된 모집입니다 🎾
+        </v-card-text>
+      </v-card>
+      <FindPeopleCard :schedule="subscribedSchedule" mode="detail" />
+      <v-card v-if="subscribedSchedule.status !== 3">
+        <v-card-text>
+          <div v-if="subscribedSchedule.contact" class="mb-1">
+            <span @click="copyContact">
+              <v-icon class="mr-2 mb-1" small>mdi-cellphone-message</v-icon>
+              <span>{{ subscribedSchedule.contact }}</span>
+              <v-icon class="ml-2 mb-1" small color="primary">
+                mdi-content-copy
+              </v-icon>
+            </span>
+          </div>
+          <div v-if="subscribedSchedule.openChatLink">
+            <v-icon class="mr-2" small>mdi-forum-outline</v-icon>
+            <a :href="subscribedSchedule.openChatLink" target="_blank">
+              <span>{{ subscribedSchedule.openChatLink }}</span>
+            </a>
+          </div>
+        </v-card-text>
+      </v-card>
+
+      <FindPeopleDetailPeople
+        :subscribedSchedule="subscribedSchedule"
+        :participants="participants"
+        :applicants="applicants"
+      />
+    </div>
+
+    <v-spacer></v-spacer>
+
+    <FindPeopleDetailActionBtn
+      :subscribedSchedule="subscribedSchedule"
+      :applicants="applicants"
+      :applicantsUserIdList="applicantsUserIdList"
+      ref="findPeopleActions"
+    />
+
+    <v-bottom-sheet
+      v-if="editDialogToggle"
+      v-model="editDialogToggle"
+      fullscreen
+    >
+      <FindPeopleRegist
+        :subscribedSchedule="subscribedSchedule"
+        mode="edit"
+        @closeButtonClicked="closeEditDialog"
+      />
+    </v-bottom-sheet>
+  </v-container>
 </template>
 
 <script>

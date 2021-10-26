@@ -4,7 +4,7 @@
       <v-toolbar-title>
         <router-link to="/" style="text-decoration: none;">
           <div class="pr-2 header-title">
-            <span class="pr-1">🎾</span>
+            <span class="pr-2">🎾</span>
             <span>TENNIS9IN</span>
           </div>
         </router-link>

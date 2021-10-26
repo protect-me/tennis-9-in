@@ -1,20 +1,18 @@
 <template>
-  <v-card
+  <v-container
     :class="{
       'court-list-container': true,
       fullscreen: mode === 'select',
     }"
   >
-    <v-card-text>
-      <v-card flat>
-        <TitleWithButton
-          titleText="테니스장 리스트"
-          :registNewButton="mode === 'view'"
-          @registNewButtonClicked="goToRegist"
-        />
-      </v-card>
-      <v-divider class="my-3"></v-divider>
+    <TitleWithButton
+      titleText="테니스장 리스트"
+      :registNewButton="mode === 'view'"
+      @registNewButtonClicked="goToRegist"
+    />
+    <v-divider class="my-3"></v-divider>
 
+    <v-card class="court-list-content">
       <v-data-table
         :headers="headers"
         :items="courts"
@@ -53,30 +51,31 @@
         </template>
         <template v-slot:no-data>No data</template>
       </v-data-table>
-      <v-spacer v-if="mode === 'select'" />
-      <v-btn
-        v-if="mode === 'select'"
-        style="max-height: 36px;"
-        block
-        color="error"
-        @click="closeSelectDialog"
-      >
-        취소
-      </v-btn>
-      <v-btn
-        v-if="mode == 'view'"
-        id="report"
-        elevation="2"
-        fab
-        small
-        color="secondary"
-        :disabled="!fireUser"
-        @click="reportBtnClicked"
-      >
-        <v-icon small>mdi-bullhorn-outline</v-icon>
-      </v-btn>
-    </v-card-text>
-  </v-card>
+    </v-card>
+
+    <v-spacer v-if="mode === 'select'" />
+    <v-btn
+      v-if="mode === 'select'"
+      style="max-height: 36px;"
+      block
+      color="error"
+      @click="closeSelectDialog"
+    >
+      취소
+    </v-btn>
+    <v-btn
+      v-if="mode == 'view'"
+      id="report"
+      elevation="2"
+      fab
+      small
+      color="secondary"
+      :disabled="!fireUser"
+      @click="reportBtnClicked"
+    >
+      <v-icon small>mdi-bullhorn-outline</v-icon>
+    </v-btn>
+  </v-container>
 </template>
 
 <script>
@@ -187,9 +186,13 @@ export default {
 .court-list-container {
   width: 100%;
   height: calc(100vh - 48px);
-  border: 5px solid red;
   display: flex;
   flex-direction: column;
+  .court-list-content {
+    width: 100%;
+    height: calc(100vh - 144px);
+    overflow: scroll;
+  }
 }
 .court-list-container.fullscreen {
   height: 100vh;

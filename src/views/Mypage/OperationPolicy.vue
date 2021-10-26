@@ -1,13 +1,11 @@
 <template>
   <v-container class="operation-policy-container">
-    <v-card flat>
-      <TitleWithButton
-        titleText="약관 및 정책"
-        goBackButton
-        @goBackButtonClicked="goBackButtonClicked"
-      />
-      <v-divider class="my-3"></v-divider>
-    </v-card>
+    <TitleWithButton
+      titleText="약관 및 정책"
+      goBackButton
+      @goBackButtonClicked="goBackButtonClicked"
+    />
+    <v-divider class="my-3"></v-divider>
 
     <v-tabs v-model="tab" grow>
       <v-tab v-for="item in items" :key="item.tab">
@@ -51,14 +49,11 @@ export default {
 
 <style lang="scss" scoped>
 .operation-policy-container {
-  background-color: white;
   width: 100%;
   height: calc(100vh - 48px);
-  display: flex;
-  flex-direction: column;
   .v-tabs-items {
     padding: 0px 2px;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 180px);
     overflow: scroll;
     .tab-item {
       margin-top: 10px;

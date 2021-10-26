@@ -1,43 +1,39 @@
 <template>
-  <v-card class="mypage-container">
-    <v-card-text>
-      <v-card v-if="user">
-        <UserCard :user="user"></UserCard>
-      </v-card>
-      <v-card v-else>
-        <div class="d-flex flex-no-wrap justify-space-between">
-          <v-avatar class="ma-3" size="125" tile>
-            <v-icon x-large>mdi-account-circle-outline</v-icon>
-          </v-avatar>
-          <div
-            class="mr-10"
-            style="display: flex; justify-content: center; align-items: center;"
+  <v-container class="mypage-container">
+    <v-card v-if="user">
+      <UserCard :user="user"></UserCard>
+    </v-card>
+    <v-card v-else>
+      <div class="d-flex flex-no-wrap justify-space-between">
+        <v-avatar class="ma-3" size="125" tile>
+          <v-icon x-large>mdi-account-circle-outline</v-icon>
+        </v-avatar>
+        <div
+          class="mr-10"
+          style="display: flex; justify-content: center; align-items: center;"
+        >
+          <v-btn
+            :disabled="isProcessing"
+            @click="loginWithGoogle"
+            :loading="isProcessing"
+            color="primary"
           >
-            <v-btn
-              :disabled="isProcessing"
-              @click="loginWithGoogle"
-              :loading="isProcessing"
-              color="primary"
-            >
-              <v-icon left dark>
-                mdi-google-plus
-              </v-icon>
-              <span>
-                구글 로그인
-              </span>
-            </v-btn>
-          </div>
+            <v-icon left dark>
+              mdi-google-plus
+            </v-icon>
+            <span>
+              구글 로그인
+            </span>
+          </v-btn>
         </div>
-      </v-card>
+      </div>
+    </v-card>
 
-      <v-divider class="my-3"></v-divider>
+    <v-divider class="my-3"></v-divider>
 
+    <v-list nav class="py-0">
       <!-- 게스트 모집 -->
-      <v-list-group
-        :value="user && user.alertApplicationToggle"
-        no-action
-        class="mt-5"
-      >
+      <v-list-group :value="user && user.alertApplicationToggle" no-action>
         <template v-slot:activator>
           <v-list-item-icon>
             <v-icon>mdi-account-search-outline</v-icon>
@@ -98,43 +94,39 @@
         </v-list-item>
       </v-list-group>
 
-      <v-list nav>
-        <v-list-item-group v-model="selectedItem" color="primary">
-          <!-- 회원 정보 수정 / 운영 정책 -->
-          <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
-            <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+      <!-- 회원 정보 수정 / 운영 정책 -->
+      <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
+        <v-list-item-icon>
+          <v-icon v-text="item.icon"></v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title v-text="item.text"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
 
-          <!-- 로그아웃 -->
-          <v-list-item v-if="fireUser" @click="logout">
-            <v-list-item-icon>
-              <v-icon>mdi-logout-variant</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>로그아웃</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-      <v-btn
-        id="dark-mode-toggle"
-        elevation="2"
-        fab
-        width="50"
-        height="50"
-        @click="toggleDarkMode"
-      >
-        <div style="min-width: 30px; font-size: 30px;">
-          {{ $vuetify.theme.dark ? '🌕' : '🌑' }}
-        </div>
-      </v-btn>
-    </v-card-text>
-  </v-card>
+      <!-- 로그아웃 -->
+      <v-list-item v-if="fireUser" @click="logout">
+        <v-list-item-icon>
+          <v-icon>mdi-logout-variant</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>로그아웃</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <v-btn
+      id="dark-mode-toggle"
+      elevation="2"
+      fab
+      width="50"
+      height="50"
+      @click="toggleDarkMode"
+    >
+      <div style="min-width: 30px; font-size: 30px;">
+        {{ $vuetify.theme.dark ? '🌕' : '🌑' }}
+      </div>
+    </v-btn>
+  </v-container>
 </template>
 
 <script>
@@ -152,7 +144,7 @@ export default {
     return {
       addtionalUserInfoToggle: false,
       isProcessing: false,
-      selectedItem: 0,
+      // selectedItem: 0,
 
       findPeopleGroup: [
         {
