@@ -11,14 +11,14 @@
     <v-container flat class="edit-user-info-content">
       <v-form v-if="user" ref="form" v-model="valid" lazy-validation>
         <div class="divide-column">
-          <v-card flat class="mb-7">
-            <v-card-subtitle>
+          <v-card class="mb-7">
+            <v-card-text>
               <span>
                 Notice.
                 <br />
                 닉네임은 첫 회원 정보 수정 시, 단 한 번 변경 가능 🎾
               </span>
-            </v-card-subtitle>
+            </v-card-text>
           </v-card>
           <v-text-field
             v-model="form.nickName"
@@ -30,7 +30,10 @@
             :rules="[rules.required, rules.counter10, rules.banGhost]"
           />
           <v-btn-toggle
-            :class="{ 'custom-box': true, 'dark-border': $vuetify.theme.dark }"
+            :class="{
+              'custom-box': true,
+              'dark-border': $vuetify.theme.dark,
+            }"
             style="width: 100%; border-radius: 4px;"
             v-model="sex"
             class="mb-7"
@@ -59,8 +62,11 @@
             :rules="[rules.required, rules.counter8]"
           />
           <div
-            :class="{ 'custom-box': true, 'dark-border': $vuetify.theme.dark }"
-            style="color: gray; border-radius: 5px; padding: 10px;"
+            :class="{
+              'pa-3': true,
+              'custom-box': true,
+              'dark-border': $vuetify.theme.dark,
+            }"
           >
             <span>
               실력 | NTRP
@@ -267,6 +273,8 @@ export default {
     overflow: scroll;
     .custom-box {
       border: 1px solid rgba(0, 0, 0, 0.42) !important;
+      color: gray;
+      border-radius: 5px;
     }
     .dark-border {
       border: 1px solid rgba(255, 255, 255, 0.24) !important;

@@ -190,7 +190,7 @@ export default {
   flex-direction: column;
   .court-list-content {
     width: 100%;
-    height: calc(100vh - 144px);
+    height: calc(100vh - 134px);
     overflow: scroll;
   }
 }

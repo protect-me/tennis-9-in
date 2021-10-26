@@ -4,7 +4,17 @@
     class="user-info-card d-flex flex-no-wrap justify-space-between"
   >
     <v-avatar class="ma-3" size="125" tile>
-      <img :src="user.photoURL" alt="User Photo" />
+      <img
+        v-if="!loadImgFailed"
+        :src="user.photoURL"
+        @error="loadImgFailed = true"
+        alt="User Photo"
+      />
+      <div v-else class="d-flex flex-no-wrap justify-space-between">
+        <v-avatar class="ma-3" size="125" tile>
+          <v-icon x-large>mdi-account-circle-outline</v-icon>
+        </v-avatar>
+      </div>
     </v-avatar>
     <div>
       <v-card-title class="text-h6 pt-3 pl-0">
@@ -49,6 +59,11 @@ export default {
       default: () => ({}),
     },
   },
+  data() {
+    return {
+      loadImgFailed: false,
+    }
+  },
   computed: {
     userAge() {
       return Math.floor((new Date().getFullYear() - this.user.birth) / 10) * 10
@@ -60,6 +75,11 @@ export default {
         else return '*'
       })
       return starId.join('') + '@' + spread[1]
+    },
+  },
+  methods: {
+    hell() {
+      console.log('here???')
     },
   },
 }

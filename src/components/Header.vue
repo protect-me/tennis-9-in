@@ -3,7 +3,14 @@
     <v-app-bar dense max-height="48px">
       <v-toolbar-title>
         <router-link to="/" style="text-decoration: none;">
-          <div class="pr-2 header-title">
+          <div
+            :class="{
+              'pr-2': true,
+              'header-title': true,
+              'header-title-dark': $vuetify.theme.dark,
+              'header-title-active': checkRouteForTitle(['Home']),
+            }"
+          >
             <span class="pr-2">🎾</span>
             <span>TENNIS9IN</span>
           </div>
@@ -96,6 +103,13 @@ export default {
         return 'grey'
       }
     },
+    checkRouteForTitle(routeArray) {
+      if (routeArray.includes(this.$route.name)) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
 }
 </script>
@@ -110,5 +124,12 @@ export default {
 }
 .header-title {
   font-family: 'Bebas Neue', cursive;
+  color: grey;
+}
+.header-title.header-title-dark {
+  color: white;
+}
+.header-title.header-title-dark.header-title-active {
+  color: #ecb558;
 }
 </style>

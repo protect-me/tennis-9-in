@@ -66,11 +66,13 @@
       v-model="editDialogToggle"
       fullscreen
     >
-      <FindPeopleRegist
-        :subscribedSchedule="subscribedSchedule"
-        mode="edit"
-        @closeButtonClicked="closeEditDialog"
-      />
+      <v-card>
+        <FindPeopleRegist
+          :subscribedSchedule="subscribedSchedule"
+          mode="edit"
+          @closeButtonClicked="closeEditDialog"
+        />
+      </v-card>
     </v-bottom-sheet>
   </v-container>
 </template>
