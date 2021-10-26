@@ -235,10 +235,12 @@ export default {
       this.applyDialogToggle = false
     },
     async registApplicant() {
-      if (this.user && this.user.createdAt === this.user.updatedAt) {
-        alert('회원 정보를 확인해주세요!')
+      if (!this.user) {
+        alert('로그인이 필요해요 🎾')
         this.$router.push({ name: 'Mypage' })
-        return
+      } else if (this.user && this.user.createdAt === this.user.updatedAt) {
+        alert('회원 정보를 확인해주세요 🎾')
+        this.$router.push({ name: 'Mypage' })
       }
       await this.$refs.form.validate()
       if (!this.valid) return

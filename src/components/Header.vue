@@ -1,10 +1,11 @@
 <template>
   <div>
-    <v-app-bar dark dense max-height="48px">
+    <v-app-bar dense max-height="48px">
       <v-toolbar-title>
-        <router-link to="/" class="white--text" style="text-decoration: none;">
-          <div class="pr-2">
-            🎾
+        <router-link to="/" style="text-decoration: none;">
+          <div class="pr-2 header-title">
+            <span class="pr-2">🎾</span>
+            <span>TENNIS9IN</span>
           </div>
         </router-link>
       </v-toolbar-title>
@@ -50,9 +51,7 @@
           style="text-decoration: none;"
         >
           <v-icon
-            :color="
-              checkRoute(['CourtList', 'CourtDetail', 'CourtRegist', 'Report'])
-            "
+            :color="checkRoute(['CourtList', 'CourtDetail', 'CourtRegist'])"
           >
             mdi-stadium
           </v-icon>
@@ -75,6 +74,7 @@
                 'FindPeopleAlert',
                 'FindPeopleRecord',
                 'OperationPolicy',
+                'Report',
               ])
             "
           >
@@ -91,7 +91,7 @@ export default {
   methods: {
     checkRoute(routeArray) {
       if (routeArray.includes(this.$route.name)) {
-        return 'white'
+        return 'primary'
       } else {
         return 'grey'
       }
@@ -100,8 +100,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 .not-active {
   color: grey;
+}
+.v-toolbar__title title {
+  font-size: 1rem !important;
+}
+.header-title {
+  font-family: 'Bebas Neue', cursive;
 }
 </style>

@@ -1,15 +1,13 @@
 <template>
   <v-container class="find-court-alert-container">
-    <v-card flat>
-      <div class="find-court-alert-header">
-        <TitleWithButton
-          titleText="영입/방출 알림"
-          goBackButton
-          @goBackButtonClicked="goBackButtonClicked"
-        />
-      </div>
-      <v-divider class="my-3"></v-divider>
-    </v-card>
+    <div class="find-court-alert-header">
+      <TitleWithButton
+        titleText="영입/방출 알림"
+        goBackButton
+        @goBackButtonClicked="goBackButtonClicked"
+      />
+    </div>
+    <v-divider class="my-3"></v-divider>
 
     <div class="result">
       <FindPeopleCard
@@ -131,7 +129,6 @@ export default {
 
 <style lang="scss" scoped>
 .find-court-alert-container {
-  background-color: white;
   width: 100%;
   height: calc(100vh - 48px);
   .result {

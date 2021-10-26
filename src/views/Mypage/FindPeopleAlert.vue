@@ -1,15 +1,13 @@
 <template>
   <v-container class="find-people-alert-container">
-    <v-card flat>
-      <div class="find-people-alert-header">
-        <TitleWithButton
-          titleText="참가 요청/취소 알림"
-          goBackButton
-          @goBackButtonClicked="goBackButtonClicked"
-        />
-      </div>
-      <v-divider class="my-3"></v-divider>
-    </v-card>
+    <div class="find-people-alert-header">
+      <TitleWithButton
+        titleText="참가 요청/취소 알림"
+        goBackButton
+        @goBackButtonClicked="goBackButtonClicked"
+      />
+    </div>
+    <v-divider class="my-3"></v-divider>
 
     <div class="result">
       <FindPeopleCard
@@ -20,7 +18,7 @@
         :createdAt="schedule.alertCreatedAt"
       ></FindPeopleCard>
       <v-card v-if="schedules && schedules.length === 0" flat>
-        <v-card-text class="mt-12" align="center">
+        <v-card-text align="center">
           참가 요청/취소 알림이 없습니다 🎾
         </v-card-text>
       </v-card>
@@ -131,7 +129,6 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-alert-container {
-  background-color: white;
   width: 100%;
   height: calc(100vh - 48px);
   .result {

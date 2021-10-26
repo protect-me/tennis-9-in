@@ -4,7 +4,7 @@
     class="user-info-card d-flex flex-no-wrap justify-space-between"
   >
     <v-avatar class="ma-3" size="125" tile>
-      <img :src="user.photoURL" alt="photo" />
+      <img :src="user.photoURL" alt="User Photo" />
     </v-avatar>
     <div>
       <v-card-title class="text-h6 pt-3 pl-0">

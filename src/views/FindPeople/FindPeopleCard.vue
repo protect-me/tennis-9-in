@@ -79,10 +79,10 @@
               <span>{{ schedule.total }}</span>
             </div>
             <div v-else-if="schedule && schedule.assignment">
-              <v-icon class="mr-1 mb-1 fontRed" x-small>
+              <v-icon class="mr-1 mb-1 fontGreen" x-small>
                 mdi-hands-pray
               </v-icon>
-              <span class="font-weight-medium fontRed">
+              <span class="font-weight-medium fontGreen">
                 양도
               </span>
             </div>
@@ -223,9 +223,12 @@ export default {
   }
 }
 .fontBlue {
-  color: #3f51b5;
+  color: #5c6bc0;
 }
 .fontRed {
-  color: #f44336;
+  color: #ef5350;
+}
+.fontGreen {
+  color: #8bc34a;
 }
 </style>

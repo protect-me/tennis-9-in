@@ -311,7 +311,7 @@ export default {
   display: flex;
   flex-direction: column;
   .find-people-detail-content {
-    height: calc(100vh - 120px);
+    height: calc(100vh - 180px);
     overflow: scroll;
   }
   .compelete-btn {

@@ -8,7 +8,7 @@
       />
     </div>
     <v-divider class="my-3"></v-divider>
-    <v-card flat class="court-regist-content">
+    <v-container flat class="court-regist-content">
       <v-form ref="form" v-model="valid" lazy-validation>
         <div class="subtitle mb-3">
           <span>
@@ -92,7 +92,7 @@
           no-resize
         />
       </v-form>
-    </v-card>
+    </v-container>
     <v-spacer></v-spacer>
     <v-btn
       class="compelete-btn"
@@ -106,10 +106,18 @@
     </v-btn>
 
     <v-dialog v-if="addressDialogToggle" v-model="addressDialogToggle">
-      <VueDaumPostcode @complete="addressSelected($event)"></VueDaumPostcode>
-      <v-btn block color="error" @click="addressDialogToggle = false">
-        close
-      </v-btn>
+      <v-card min-height="500px">
+        <div style="min-height: 466px; background-color: #fff;">
+          <VueDaumPostcode
+            @complete="addressSelected($event)"
+          ></VueDaumPostcode>
+        </div>
+
+        <v-spacer></v-spacer>
+        <v-btn block color="error" @click="addressDialogToggle = false">
+          close
+        </v-btn>
+      </v-card>
     </v-dialog>
 
     <v-dialog v-if="courtTypeHelpToggle" v-model="courtTypeHelpToggle">
@@ -329,7 +337,7 @@ export default {
   display: flex;
   flex-direction: column;
   .court-regist-content {
-    height: calc(100vh - 133px);
+    height: calc(100vh - 180px);
     overflow: scroll;
   }
   .compelete-btn {

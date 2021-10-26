@@ -7,8 +7,11 @@ import ko from 'vuetify/es5/locale/ko'
 Vue.use(Vuetify)
 
 const theme = {
-  // dark: false,
+  dark: false,
   themes: {
+    options: {
+      customProperties: true,
+    },
     light: {
       // primary: "#344059",
       // secondary: "#BFBFBF", // "#FFCDD2"
@@ -18,37 +21,34 @@ const theme = {
       // warning: "#F29727",
       // error: "#F24C3D",
       // background: "#f9f9f9",
-
-      primary: '#485c60', //'rgba(72,92,96)'
-      secondary: '#667456', // 'rgba(102,116,86)',
-
-      accent: '#ecb558',
+      primary: '#ecb558',
+      secondary: '#849372', // 'rgba(132, 147, 114, 1)'
+      accent: '#6e8486', //'rgba(110, 132, 134, 1)'
       info: '#4E7DA6',
       success: '#26A699',
       warning: '#ecb558',
       error: '#F24C3D',
-      background: '#FFFFFF',
+      // background: '#FFFFFF',
+      background: '#000000',
 
       // backgroundDarken: "#f9f9f9",
       // background: "##FFCDD2",
-      // background: "#000000",
     },
     dark: {
       // primary: colors.brown.darken1, // #E53935
       // secondary: colors.deepPurple.lighten4, // #FFCDD2
       // accent: colors.indigo.base, // #3F51B5
-
       // primary: "#E53935",
       // secondary: "#FFCDD2",
       // accent: "#3F51B5",
 
-      primary: '#485c60', //'rgba(72,92,96)'
-      secondary: '##667456', // 'rgba(102,116,86)',
-      accent: '#ecb558',
-
+      primary: '#ecb558',
+      secondary: '#849372', // 'rgba(132, 147, 114, 1)'
+      accent: '#6e8486', //'rgba(110, 132, 134, 1)'
       info: '#5ca4e5',
       success: '#26A699',
       warning: '#ecb558',
+      background: '#FFFFFF',
       error: '#F24C3D',
     },
   },

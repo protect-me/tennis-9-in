@@ -29,95 +29,103 @@
       </div>
     </v-card>
 
-    <!-- 게스트 모집 -->
-    <v-list-group
-      :value="user && user.alertApplicationToggle"
-      no-action
-      class="mt-5"
-    >
-      <template v-slot:activator>
-        <v-list-item-icon>
-          <v-icon>mdi-account-search-outline</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            게스트 모집
-          </v-list-item-title>
-        </v-list-item-content>
-      </template>
+    <v-divider class="my-3"></v-divider>
 
-      <v-list-item
-        v-for="(item, index) in findPeopleGroup"
-        :key="index"
-        link
-        :to="item.to"
-      >
-        <v-list-item-content>
+    <v-list nav class="py-0">
+      <!-- 게스트 모집 -->
+      <v-list-group :value="user && user.alertApplicationToggle" no-action>
+        <template v-slot:activator>
+          <v-list-item-icon>
+            <v-icon>mdi-account-search-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              게스트 모집
+            </v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          v-for="(item, index) in findPeopleGroup"
+          :key="index"
+          link
+          :to="item.to"
+        >
+          <v-list-item-content>
+            <v-list-item-title
+              v-if="(item.type === 'alert' && user && user.alertApplicationToggle)"
+            >
+              <v-badge color="pink" dot>
+                <span>{{ item.text }}</span>
+              </v-badge>
+            </v-list-item-title>
+            <v-list-item-title v-else v-text="item.text"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
+
+      <!-- 게스트 요청 -->
+      <v-list-group :value="user && user.alertParticipationToggle" no-action>
+        <template v-slot:activator>
+          <v-list-item-icon>
+            <v-icon>mdi-calendar-search</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              게스트 참가
+            </v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          v-for="(item, index) in applyRecordGroup"
+          :key="index"
+          link
+          :to="item.to"
+        >
           <v-list-item-title
-            v-if="(item.type === 'alert' && user && user.alertApplicationToggle)"
+            v-if="(item.type === 'alert' && user && user.alertParticipationToggle)"
           >
             <v-badge color="pink" dot>
               <span>{{ item.text }}</span>
             </v-badge>
           </v-list-item-title>
           <v-list-item-title v-else v-text="item.text"></v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list-group>
+        </v-list-item>
+      </v-list-group>
 
-    <!-- 게스트 요청 -->
-    <v-list-group :value="user && user.alertParticipationToggle" no-action>
-      <template v-slot:activator>
+      <!-- 회원 정보 수정 / 운영 정책 -->
+      <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
         <v-list-item-icon>
-          <v-icon>mdi-calendar-search</v-icon>
+          <v-icon v-text="item.icon"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>
-            게스트 참가
-          </v-list-item-title>
+          <v-list-item-title v-text="item.text"></v-list-item-title>
         </v-list-item-content>
-      </template>
-
-      <v-list-item
-        v-for="(item, index) in applyRecordGroup"
-        :key="index"
-        link
-        :to="item.to"
-      >
-        <v-list-item-title
-          v-if="(item.type === 'alert' && user && user.alertParticipationToggle)"
-        >
-          <v-badge color="pink" dot>
-            <span>{{ item.text }}</span>
-          </v-badge>
-        </v-list-item-title>
-        <v-list-item-title v-else v-text="item.text"></v-list-item-title>
       </v-list-item>
-    </v-list-group>
 
-    <v-list nav>
-      <v-list-item-group v-model="selectedItem" color="primary">
-        <!-- 회원 정보 수정 / 운영 정책 -->
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- 로그아웃 -->
-        <v-list-item v-if="fireUser" @click="logout">
-          <v-list-item-icon>
-            <v-icon>mdi-logout-variant</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>로그아웃</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
+      <!-- 로그아웃 -->
+      <v-list-item v-if="fireUser" @click="logout">
+        <v-list-item-icon>
+          <v-icon>mdi-logout-variant</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>로그아웃</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
+    <v-btn
+      id="dark-mode-toggle"
+      elevation="2"
+      fab
+      width="50"
+      height="50"
+      @click="toggleDarkMode"
+    >
+      <div style="min-width: 30px; font-size: 30px;">
+        {{ $vuetify.theme.dark ? '🌕' : '🌑' }}
+      </div>
+    </v-btn>
   </v-container>
 </template>
 
@@ -136,7 +144,7 @@ export default {
     return {
       addtionalUserInfoToggle: false,
       isProcessing: false,
-      selectedItem: 0,
+      // selectedItem: 0,
 
       findPeopleGroup: [
         {
@@ -216,17 +224,27 @@ export default {
         (!this.user.sex ||
           !this.user.birth ||
           !this.user.location ||
-          !this.user.ntrp)
+          !this.user.ntrp ||
+          this.user.createdAt === this.user.updatedAt)
       ) {
         this.$router.push({ name: 'EditUserInfo' })
       }
     },
-    logout() {
+    async logout() {
       const answer = window.confirm('로그아웃 하시겠습니까?')
       if (answer) {
         this.$firebase.auth().signOut()
+        await this.$store.dispatch('setUser', null)
+        await this.$store.dispatch('setFireUser', null)
         alert('로그아웃 되었습니다')
       }
+    },
+    toggleDarkMode() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      localStorage.setItem(
+        'Tennis9InDarkTheme',
+        this.$vuetify.theme.dark.toString(),
+      )
     },
   },
 }
@@ -234,6 +252,13 @@ export default {
 
 <style lang="scss" scoped>
 .mypage-container {
+  width: 100%;
   height: calc(100vh - 48px);
+}
+#dark-mode-toggle {
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  margin: 16px;
 }
 </style>

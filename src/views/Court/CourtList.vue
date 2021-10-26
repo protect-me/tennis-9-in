@@ -5,53 +5,54 @@
       fullscreen: mode === 'select',
     }"
   >
-    <v-card flat>
-      <TitleWithButton
-        titleText="테니스장 리스트"
-        :registNewButton="mode === 'view'"
-        @registNewButtonClicked="goToRegist"
-      />
-      <v-divider class="my-3"></v-divider>
+    <TitleWithButton
+      titleText="테니스장 리스트"
+      :registNewButton="mode === 'view'"
+      @registNewButtonClicked="goToRegist"
+    />
+    <v-divider class="my-3"></v-divider>
+
+    <v-card class="court-list-content">
+      <v-data-table
+        :headers="headers"
+        :items="courts"
+        :search="search"
+        :loading="loading"
+        hide-default-footer
+        mobile-breakpoint="1"
+        disable-pagination
+        sort-by="address"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-toolbar>
+        </template>
+        <template v-slot:[`item.address`]="{ item }">
+          {{ item.addressSigungu }} {{ item.addressLocal }}
+        </template>
+        <template v-slot:[`item.addressJibun`]="{ item }">
+          <v-icon v-if="mode === 'view'" class="mr-2" @click="goToDetail(item)">
+            mdi-arrow-right-bold-circle-outline
+          </v-icon>
+          <v-icon
+            v-if="mode === 'select'"
+            class="mr-2"
+            @click="selectCourt(item)"
+          >
+            mdi-check-circle-outline
+          </v-icon>
+        </template>
+        <template v-slot:no-data>No data</template>
+      </v-data-table>
     </v-card>
 
-    <v-data-table
-      :headers="headers"
-      :items="courts"
-      :search="search"
-      :loading="loading"
-      hide-default-footer
-      mobile-breakpoint="1"
-      disable-pagination
-      sort-by="address"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-toolbar>
-      </template>
-      <template v-slot:[`item.address`]="{ item }">
-        {{ item.addressSigungu }} {{ item.addressLocal }}
-      </template>
-      <template v-slot:[`item.addressJibun`]="{ item }">
-        <v-icon v-if="mode === 'view'" class="mr-2" @click="goToDetail(item)">
-          mdi-arrow-right-bold-circle-outline
-        </v-icon>
-        <v-icon
-          v-if="mode === 'select'"
-          class="mr-2"
-          @click="selectCourt(item)"
-        >
-          mdi-check-circle-outline
-        </v-icon>
-      </template>
-      <template v-slot:no-data>No data</template>
-    </v-data-table>
     <v-spacer v-if="mode === 'select'" />
     <v-btn
       v-if="mode === 'select'"
@@ -63,6 +64,7 @@
       취소
     </v-btn>
     <v-btn
+      v-if="mode == 'view'"
       id="report"
       elevation="2"
       fab
@@ -150,11 +152,14 @@ export default {
       this.loading = false
     },
     goToRegist() {
-      if (this.user && this.user.createdAt !== this.user.updatedAt) {
-        this.$router.push({ name: 'CourtRegist' })
-      } else {
-        alert('회원 정보를 확인해주세요!')
+      if (!this.user) {
+        alert('로그인이 필요해요 🎾')
         this.$router.push({ name: 'Mypage' })
+      } else if (this.user && this.user.createdAt === this.user.updatedAt) {
+        alert('회원 정보를 확인해주세요 🎾')
+        this.$router.push({ name: 'Mypage' })
+      } else {
+        this.$router.push({ name: 'CourtRegist' })
       }
     },
     async goToDetail(item) {
@@ -183,6 +188,11 @@ export default {
   height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
+  .court-list-content {
+    width: 100%;
+    height: calc(100vh - 144px);
+    overflow: scroll;
+  }
 }
 .court-list-container.fullscreen {
   height: 100vh;

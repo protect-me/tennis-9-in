@@ -69,7 +69,7 @@
         :schedule="schedule"
       ></FindPeopleCard>
       <v-card v-if="schedules && schedules.length === 0" flat>
-        <v-card-text class="mt-12" align="center">
+        <v-card-text align="center">
           해당 테니스장에는 게스트 모집 중인 공고가 없습니다 🎾
         </v-card-text>
       </v-card>

@@ -8,10 +8,10 @@
       />
     </div>
     <v-divider class="my-3"></v-divider>
-    <v-card flat class="edit-user-info-content">
+    <v-container flat class="edit-user-info-content">
       <v-form v-if="user" ref="form" v-model="valid" lazy-validation>
         <div class="divide-column">
-          <v-card flat class="mb-3">
+          <v-card flat class="mb-7">
             <v-card-subtitle>
               <span>
                 Notice.
@@ -30,11 +30,8 @@
             :rules="[rules.required, rules.counter10, rules.banGhost]"
           />
           <v-btn-toggle
-            style="
-              width: 100%;
-              border: 1px solid rgba(0, 0, 0, 0.42);
-              border-radius: 4px;
-            "
+            :class="{ 'custom-box': true, 'dark-border': $vuetify.theme.dark }"
+            style="width: 100%; border-radius: 4px;"
             v-model="sex"
             class="mb-7"
             color="primary"
@@ -62,12 +59,8 @@
             :rules="[rules.required, rules.counter8]"
           />
           <div
-            style="
-              color: gray;
-              border: 1px solid rgba(0, 0, 0, 0.42);
-              border-radius: 5px;
-              padding: 10px;
-            "
+            :class="{ 'custom-box': true, 'dark-border': $vuetify.theme.dark }"
+            style="color: gray; border-radius: 5px; padding: 10px;"
           >
             <span>
               실력 | NTRP
@@ -84,11 +77,12 @@
               ticks="always"
               tick-size="0"
               style="font-size: 12px;"
+              track-color="gray"
             ></v-slider>
           </div>
         </div>
       </v-form>
-    </v-card>
+    </v-container>
     <v-spacer></v-spacer>
 
     <v-btn
@@ -271,6 +265,12 @@ export default {
   .edit-user-info-content {
     height: calc(100vh - 133px);
     overflow: scroll;
+    .custom-box {
+      border: 1px solid rgba(0, 0, 0, 0.42) !important;
+    }
+    .dark-border {
+      border: 1px solid rgba(255, 255, 255, 0.24) !important;
+    }
   }
   .compelete-btn {
     max-height: 36px;

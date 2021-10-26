@@ -5,6 +5,7 @@
       'edit-mode': mode === 'edit',
     }"
   >
+    <!-- <v-card-text class="pa-3"> -->
     <div class="find-people-regist-header">
       <TitleWithButton
         v-if="mode === 'regist'"
@@ -20,7 +21,7 @@
       />
     </div>
     <v-divider class="my-3"></v-divider>
-    <v-card flat class="find-people-regist-content">
+    <v-container flat class="find-people-regist-content">
       <v-card class="mb-3" flat>
         <v-card-text class="pa-2">
           <div>Notice.</div>
@@ -176,7 +177,7 @@
           <div
             class="mr-3 mb-3"
             align="center"
-            style="border: 1px solid rgb(182, 182, 182); border-radius: 4px;"
+            style="border: 1px solid rgb(70, 70, 70); border-radius: 4px;"
           >
             <div style="color: rgb(117, 117, 117);" class="mx-auto">
               양도
@@ -248,7 +249,7 @@
           :rules="[rules.counter]"
         />
       </v-form>
-    </v-card>
+    </v-container>
     <v-spacer></v-spacer>
     <div v-if="mode === 'regist'">
       <v-btn
@@ -285,6 +286,7 @@
     <v-dialog v-if="helpNtrpToggle" v-model="helpNtrpToggle" scrollable>
       <HelpNtrp @closeHelpNtrp="closeHelpNtrp"></HelpNtrp>
     </v-dialog>
+    <!-- </v-card-text> -->
   </v-container>
 </template>
 
@@ -316,7 +318,7 @@ export default {
     })
   },
   async beforeDestroy() {
-    await this.$store.dispatch('setSelectedTab', 0)
+    if (this.isComplete) await this.$store.dispatch('setSelectedTab', 0)
   },
   computed: {
     ...mapState(['fireUser', 'user']),
@@ -590,13 +592,13 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-regist-container {
-  background-color: white;
+  /* background-color: white; */
   width: 100%;
   height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
   .find-people-regist-content {
-    height: calc(100vh - 133px);
+    height: calc(100vh - 180px);
     overflow: scroll;
   }
   .compelete-btn {
@@ -607,9 +609,8 @@ export default {
   }
 }
 .find-people-regist-container.edit-mode {
-  height: 100vh;
   .find-people-regist-content {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 120px);
     overflow: scroll;
   }
 }

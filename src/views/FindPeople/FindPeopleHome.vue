@@ -1,15 +1,13 @@
 <template>
   <v-container class="find-people-container">
-    <v-card flat>
-      <TitleWithButton
-        titleText="게스트 모집"
-        registNewButton
-        @registNewButtonClicked="moveToRegist"
-      />
-      <v-divider class="my-3"></v-divider>
-    </v-card>
+    <TitleWithButton
+      titleText="게스트 모집"
+      registNewButton
+      @registNewButtonClicked="moveToRegist"
+    />
+    <v-divider class="my-3"></v-divider>
 
-    <v-tabs v-model="tab" grow>
+    <v-tabs v-model="tab" grow color="primary">
       <v-tab v-for="item in items" :key="item.tab">
         <span class="mr-2">{{ item.tab }}</span>
         <v-icon>{{ item.icon }}</v-icon>
@@ -106,11 +104,14 @@ export default {
       }
     },
     moveToRegist() {
-      if (this.user && this.user.createdAt !== this.user.updatedAt) {
-        this.$router.push({ name: 'FindPeopleRegist' })
-      } else {
-        alert('회원 정보를 확인해주세요!')
+      if (!this.user) {
+        alert('로그인이 필요해요 🎾')
         this.$router.push({ name: 'Mypage' })
+      } else if (this.user && this.user.createdAt === this.user.updatedAt) {
+        alert('회원 정보를 확인해주세요 🎾')
+        this.$router.push({ name: 'Mypage' })
+      } else {
+        this.$router.push({ name: 'FindPeopleRegist' })
       }
     },
   },
@@ -125,7 +126,7 @@ export default {
     height: calc(100vh - 180px);
     overflow: scroll;
     .tab-item {
-      margin-top: 10px;
+      padding-top: 10px;
     }
   }
 }
