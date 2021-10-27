@@ -5,7 +5,6 @@
       'edit-mode': mode === 'edit',
     }"
   >
-    <!-- <v-card-text class="pa-3"> -->
     <div class="find-people-regist-header">
       <TitleWithButton
         v-if="mode === 'regist'"
@@ -21,9 +20,9 @@
       />
     </div>
     <v-divider class="my-3"></v-divider>
-    <v-container flat class="find-people-regist-content">
-      <v-card class="mb-3" flat>
-        <v-card-text class="pa-2">
+    <v-container class="find-people-regist-content">
+      <v-card class="mb-4">
+        <v-card-text>
           <div>Notice.</div>
           <div>1. 시간 오전/오후 필수 확인 🎾</div>
           <div>2. 분 단위 내림 처리(e.g. 47분 ⇒ 40분)</div>
@@ -147,13 +146,12 @@
         </div>
 
         <div
-          class="mb-3"
-          style="
-            color: gray;
-            border: 1px solid;
-            border-radius: 5px;
-            padding: 10px;
-          "
+          :class="{
+            'pa-3': true,
+            'mb-3': true,
+            'custom-box': true,
+            'dark-border': $vuetify.theme.dark,
+          }"
         >
           <span>
             실력 | NTRP
@@ -170,14 +168,19 @@
             ticks="always"
             tick-size="0"
             style="font-size: 12px; width: calc(100% - 10px);"
+            track-color="gray"
           ></v-slider>
         </div>
 
         <div class="divide-column">
           <div
-            class="mr-3 mb-3"
+            :class="{
+              'mr-3': true,
+              'mb-3': true,
+              'custom-box': true,
+              'dark-border': $vuetify.theme.dark,
+            }"
             align="center"
-            style="border: 1px solid rgb(70, 70, 70); border-radius: 4px;"
           >
             <div style="color: rgb(117, 117, 117);" class="mx-auto">
               양도
@@ -592,14 +595,20 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-regist-container {
-  /* background-color: white; */
-  width: 100%;
   height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
   .find-people-regist-content {
     height: calc(100vh - 180px);
     overflow: scroll;
+    .custom-box {
+      border: 1px solid rgba(0, 0, 0, 0.42) !important;
+      color: gray;
+      border-radius: 5px;
+    }
+    .dark-border {
+      border: 1px solid rgba(255, 255, 255, 0.24) !important;
+    }
   }
   .compelete-btn {
     max-height: 36px;
@@ -609,8 +618,9 @@ export default {
   }
 }
 .find-people-regist-container.edit-mode {
+  height: 100vh;
   .find-people-regist-content {
-    height: calc(100vh - 120px);
+    height: calc(100vh - 12px);
     overflow: scroll;
   }
 }

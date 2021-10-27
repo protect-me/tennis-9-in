@@ -12,7 +12,7 @@
     />
     <v-divider class="my-3"></v-divider>
 
-    <v-card class="court-list-content">
+    <v-card class="court-list-content" flat>
       <v-data-table
         :headers="headers"
         :items="courts"
@@ -190,7 +190,7 @@ export default {
   flex-direction: column;
   .court-list-content {
     width: 100%;
-    height: calc(100vh - 144px);
+    height: calc(100vh - 134px);
     overflow: scroll;
   }
 }
