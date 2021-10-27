@@ -12,7 +12,7 @@
     />
     <v-divider class="my-3"></v-divider>
 
-    <v-card class="court-list-content">
+    <v-card class="court-list-content" flat>
       <v-data-table
         :headers="headers"
         :items="courts"

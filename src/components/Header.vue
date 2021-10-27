@@ -126,10 +126,10 @@ export default {
   font-family: 'Bebas Neue', cursive;
   color: grey;
 }
-.header-title.header-title-dark {
+.header-title-dark {
   color: white;
 }
-.header-title.header-title-dark.header-title-active {
+.header-title-active {
   color: #ecb558;
 }
 </style>

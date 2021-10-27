@@ -16,7 +16,7 @@
       v-model="applyDialogToggle"
       @click:outside="closeApplyDialog"
     >
-      <v-container>
+      <v-container class="pa-0">
         <v-card>
           <UserCard :user="user"></UserCard>
           <v-card-text class="py-2">
