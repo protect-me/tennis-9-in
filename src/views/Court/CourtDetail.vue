@@ -119,8 +119,12 @@ export default {
           .get()
         this.court = courtInfo.data()
       } catch (err) {
-        alert('court 정보 확인 실패', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('court 데이터 로드 실패', err)
       }
     },
     async initSchedulesData() {
@@ -160,8 +164,12 @@ export default {
             }
           })
       } catch (err) {
-        alert('schedule 정보 확인 실패', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('schedule 데이터 로드 실패', err)
       }
     },
   },

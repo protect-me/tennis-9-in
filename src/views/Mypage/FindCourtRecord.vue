@@ -165,8 +165,12 @@ export default {
           })
         await this.filteringSchedules()
       } catch (err) {
-        alert('데이터를 가져오는데 실패했습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '데이터 로드 실패',
+        })
+        console.log('데이터 로드 실패', err)
       }
     },
     filteringSchedules() {
@@ -194,7 +198,11 @@ export default {
             return item.participants.includes(this.fireUser.uid)
           })
         })
-        alert('영입된 모집만 보여집니다 🎾')
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '영입된 모집만 보여집니다 🎾',
+        })
       } else {
         arr.forEach((items) => (this[items] = []))
         this.filteringSchedules()

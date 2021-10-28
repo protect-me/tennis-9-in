@@ -69,8 +69,12 @@ export default {
           }
         })
       } catch (err) {
-        alert('데이터를 가져올 수 없습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('데이터 로드 실패', err)
       }
       this.setMarker()
     },

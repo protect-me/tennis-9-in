@@ -289,11 +289,11 @@
     <v-dialog v-if="helpNtrpToggle" v-model="helpNtrpToggle" scrollable>
       <HelpNtrp @closeHelpNtrp="closeHelpNtrp"></HelpNtrp>
     </v-dialog>
-    <!-- </v-card-text> -->
   </v-container>
 </template>
 
 <script>
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
 import CourtList from '../Court/CourtList'
 import HelpNtrp from '../../components/HelpNtrp'
@@ -419,8 +419,12 @@ export default {
         if (!snapshot) return
         this.courtTypes = snapshot.data().courtTypes
       } catch (err) {
-        alert('코트 타입 정보 확인 불가', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '코트 타입 데이터 로드 실패',
+        })
+        console.log('코트 타입 데이터 로드 실패', err)
       }
       this.selectedNtrp = Number(this.subscribedSchedule.ntrp) * 2 - 1 || 7
       this.form = {
@@ -474,7 +478,11 @@ export default {
           this.form.total < 0 ||
           this.form.total < this.form.vacant
         ) {
-          alert('입력한 인원을 확인해주세요!')
+          this.$store.dispatch('openAlert', {
+            color: 'primary',
+            icon: 'mdi-alert-circle-outline',
+            message: '입력한 인원을 확인해주세요!',
+          })
           return
         }
       } else {
@@ -482,7 +490,11 @@ export default {
         this.form.total = 2
       }
       if (!this.form.contact && !this.form.openChatLink) {
-        alert('연락처 혹은 오픈채팅방 링크를 입력해주세요!')
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '연락처 혹은 오픈채팅방 링크를 입력해주세요!',
+        })
         this.isProcessing = false
         return
       }
@@ -533,7 +545,11 @@ export default {
         await batch.commit()
         console.log('등록 성공')
       } catch (err) {
-        alert('등록에 실패했습니다.', err.message)
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '등록 실패',
+        })
         console.log('등록 실패', err.message)
       } finally {
         this.isProcessing = false
@@ -547,27 +563,39 @@ export default {
     },
     async deleteBtnClicked() {
       if (this.subscribedSchedule.participants.length > 0) {
-        alert('참여자가 있을 경우 모집을 삭제할 수 없습니다 🎾')
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '참여자가 있을 경우 모집을 삭제할 수 없습니다 🎾',
+        })
         return
       }
-      const answer = window.confirm(
-        '모집을 삭제할 경우 복구할 수 없습니다. 그래도 삭제하시겠어요?',
-      )
-      if (answer) {
-        try {
-          const ref = this.$firebase
-            .firestore()
-            .collection('findPeople')
-            .doc(this.subscribedSchedule.scheduleId)
-          await ref.update({ status: 9 })
-          alert('성공적으로 삭제되었습니다 🎾')
-          console.log('삭제 성공')
-        } catch (err) {
-          console.log('삭제 실패')
-        } finally {
-          this.$router.push({ name: 'FindPeopleHome' })
+      await this.$store.dispatch('openConfirm', {
+        message:
+          '모집을 삭제할 경우 복구할 수 없습니다. 그래도 삭제하시겠어요?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) {
+          try {
+            const ref = this.$firebase
+              .firestore()
+              .collection('findPeople')
+              .doc(this.subscribedSchedule.scheduleId)
+            await ref.update({ status: 9 })
+
+            this.$store.dispatch('openAlert', {
+              color: 'primary',
+              icon: 'mdi-alert-circle-outline',
+              message: '성공적으로 삭제되었습니다 🎾',
+            })
+            console.log('삭제 성공')
+          } catch (err) {
+            console.log('삭제 실패')
+          } finally {
+            this.$router.push({ name: 'FindPeopleHome' })
+          }
         }
-      }
+      })
     },
     openNtrpHelp() {
       this.helpNtrpToggle = true
@@ -576,18 +604,17 @@ export default {
       this.helpNtrpToggle = false
     },
   },
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     if (this.isComplete) {
       next()
     } else {
-      const answer = window.confirm(
-        '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
-      )
-      if (answer) {
-        next()
-      } else {
-        next(false)
-      }
+      await this.$store.dispatch('openConfirm', {
+        message: '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
+      })
+      EventBus.$once('confirmReturn', (answer) => {
+        if (answer) next()
+        else return
+      })
     }
   },
 }

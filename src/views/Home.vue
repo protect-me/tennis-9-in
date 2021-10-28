@@ -12,7 +12,7 @@
 
     <v-card class="mb-2" nav :to="'FindPeopleHome'">
       <v-card-subtitle>
-        <v-icon class="mr-3">mdi-account-group-ouhelltline</v-icon>
+        <v-icon class="mr-3">mdi-account-search-outline</v-icon>
         <span>게스트 모집</span>
       </v-card-subtitle>
       <v-card-text>
@@ -48,7 +48,7 @@
 
     <v-card class="mb-2" nav :to="'Mypage'">
       <v-card-subtitle>
-        <v-icon class="mr-3">mdi-map-search-outline</v-icon>
+        <v-icon class="mr-3">mdi-account-circle-outline</v-icon>
         <span>마이페이지</span>
       </v-card-subtitle>
       <v-card-text>

@@ -1,17 +1,36 @@
 <template>
   <v-app>
     <Header></Header>
+
     <v-main>
       <router-view />
     </v-main>
+
+    <transition name="fade">
+      <Alert class="custom-alert" v-if="$store.state.alertInfo"></Alert>
+    </transition>
+
+    <v-dialog v-model="$store.state.confirmToggle" persistent>
+      <Confirm></Confirm>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
 import Header from '@/components/Header'
+import Alert from '@/components/Alert'
+import Confirm from '@/components/Confirm'
+
 export default {
   components: {
+    Alert,
     Header,
+    Confirm,
+  },
+  data() {
+    return {
+      toggle: true,
+    }
   },
   mounted() {
     const theme = localStorage.getItem('Tennis9InDarkTheme')
@@ -31,5 +50,19 @@ export default {
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
+}
+.custom-alert {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  z-index: 999;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

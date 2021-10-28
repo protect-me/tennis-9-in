@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
 import TitleWithButton from '../../components/TitleWithButton'
 
@@ -153,11 +154,25 @@ export default {
     },
     goToRegist() {
       if (!this.user) {
-        alert('로그인이 필요해요 🎾')
-        this.$router.push({ name: 'Mypage' })
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '로그인이 필요해요',
+          nextBtn: true,
+          nextFunction: () => {
+            this.$router.push({ name: 'Mypage' })
+          },
+        })
       } else if (this.user && this.user.createdAt === this.user.updatedAt) {
-        alert('회원 정보를 확인해주세요 🎾')
-        this.$router.push({ name: 'Mypage' })
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '회원 정보를 확인해주세요',
+          nextBtn: true,
+          nextFunction: () => {
+            this.$router.push({ name: 'Mypage' })
+          },
+        })
       } else {
         this.$router.push({ name: 'CourtRegist' })
       }
@@ -172,11 +187,13 @@ export default {
     closeSelectDialog() {
       this.$emit('closeSelectDialog')
     },
-    reportBtnClicked() {
-      const answer = window.confirm('수정 요청을 하시겠습니까?')
-      if (answer) {
-        this.$router.push({ name: 'Report' })
-      }
+    async reportBtnClicked() {
+      await this.$store.dispatch('openConfirm', {
+        message: '수정 요청을 하시겠습니까?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) this.$router.push({ name: 'Report' })
+      })
     },
   },
 }

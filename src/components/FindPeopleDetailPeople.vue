@@ -207,66 +207,91 @@ export default {
       if (this.subscribedSchedule.organizer === participant.userId) return
       if (participant.userId === 'Ghost') return
 
-      const answer = window.confirm('게스트를 방출하시겠어요?')
-      if (!answer) return
-      const answer2 = window.confirm('게스트에게 방출 사실을 알렸나요?')
-      if (answer && answer2) {
-        try {
-          const batch = await this.$firebase.firestore().batch()
-          batch.update(this.ref, {
-            participants: this.$firebase.firestore.FieldValue.arrayRemove(
-              participant.userId,
-            ),
-          })
-          if (
-            this.subscribedSchedule.participants.includes(participant.userId)
-          ) {
+      await this.$store.dispatch('openConfirm', {
+        message: '게스트를 방출하시겠어요?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) {
+          try {
+            const batch = await this.$firebase.firestore().batch()
             batch.update(this.ref, {
-              vacant: this.$firebase.firestore.FieldValue.increment(1),
+              participants: this.$firebase.firestore.FieldValue.arrayRemove(
+                participant.userId,
+              ),
             })
+            if (
+              this.subscribedSchedule.participants.includes(participant.userId)
+            ) {
+              batch.update(this.ref, {
+                vacant: this.$firebase.firestore.FieldValue.increment(1),
+              })
+            }
+            batch.update(this.refUser.doc(participant.userId), {
+              applicantsList: this.$firebase.firestore.FieldValue.arrayRemove(
+                this.fireUser.uid,
+              ),
+            })
+            await batch.commit()
+            this.$store.dispatch('openAlert', {
+              color: 'primary',
+              icon: 'mdi-alert-circle-outline',
+              message: '방출된 게스트에게 방출 사실을 꼭 알리세요 🎾',
+            })
+            console.log('게스트 방출 성공')
+          } catch (err) {
+            this.$store.dispatch('openAlert', {
+              color: 'primary',
+              icon: 'mdi-alert-circle-outline',
+              message: '게스트 방출 실패',
+            })
+            console.log('게스트 방출 실패', err)
           }
-          batch.update(this.refUser.doc(participant.userId), {
-            applicantsList: this.$firebase.firestore.FieldValue.arrayRemove(
-              this.fireUser.uid,
-            ),
-          })
-          await batch.commit()
-          alert('방출된 게스트에게 방출 사실을 꼭 알리세요 🎾')
-          console.log('게스트 방출 성공')
-        } catch (err) {
-          alert('게스트 방출 실패', err)
-          console.log(err)
-        } finally {
         }
-      }
+      })
     },
 
     async selectApplicant(applicant) {
       if (this.subscribedSchedule.status !== 1) return
       if (this.subscribedSchedule.organizer !== this.fireUser.uid) return
       if (this.subscribedSchedule.participants.includes(applicant.userId)) {
-        alert('이미 참여한 게스트입니다!')
+        this.$store.dispatch('openAlert', {
+          color: 'primary',
+          icon: 'mdi-alert-circle-outline',
+          message: '이미 참여한 게스트입니다!',
+        })
         return
       }
 
-      const answer = window.confirm('게스트로 영입하시겠어요?')
-      if (answer) {
-        try {
-          const batch = await this.$firebase.firestore().batch()
-          batch.update(this.ref, {
-            participants: this.$firebase.firestore.FieldValue.arrayUnion(
-              applicant.userId,
-            ),
-            vacant: this.$firebase.firestore.FieldValue.increment(-1),
-          })
-          await batch.commit()
-          console.log('게스트 영입 성공')
-          alert('게스트에게 영입 사실을 꼭 알려주세요 🎾')
-        } catch (err) {
-          alert('게스트 영입 실패', err)
-          console.log(err)
+      await this.$store.dispatch('openConfirm', {
+        message: '게스트를 영입하시겠어요?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) {
+          try {
+            const batch = await this.$firebase.firestore().batch()
+            batch.update(this.ref, {
+              participants: this.$firebase.firestore.FieldValue.arrayUnion(
+                applicant.userId,
+              ),
+              vacant: this.$firebase.firestore.FieldValue.increment(-1),
+            })
+            await batch.commit()
+            this.$store.dispatch('openAlert', {
+              color: 'primary',
+              icon: 'mdi-alert-circle-outline',
+              message: '게스트 영입 성공',
+            })
+            console.log('게스트 영입 성공')
+          } catch (err) {
+            this.$store.dispatch('openAlert', {
+              color: 'primary',
+              icon: 'mdi-alert-circle-outline',
+              message: '게스트 영입 실패',
+            })
+            console.log(err)
+          }
         }
-      }
+      })
     },
   },
 }
