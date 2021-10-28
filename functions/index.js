@@ -32,12 +32,20 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
     alertParticipationToggle: false,
   }
   await fdb.collection('users').doc(uid).set(userInfo) // set user at Firestore
+  await fdb
+    .collection('meta')
+    .doc('users')
+    .update({ createUser: admin.firestore.FieldValue.increment(1) })
   db.ref('users').child(uid).set(userInfo) // set user at RealTime Database
 })
 
 exports.deleteUser = functions.auth.user().onDelete(async (user) => {
   const { uid } = user
   await db.ref('users').child(uid).remove()
+  await fdb
+    .collection('meta')
+    .doc('users')
+    .update({ deleteUser: admin.firestore.FieldValue.increment() })
   await fdb.collection('users').doc(uid).delete()
 })
 
@@ -87,6 +95,11 @@ exports.createApplicants = functions.firestore
           alertStatus: 1,
         }, // 신규 게스트 참여 요청 알림
       )
+      // meta update
+      const refMeta = fdb.collection('meta').doc('findPeople')
+      batch.update(refMeta, {
+        applicantionCount: admin.firestore.FieldValue.increment(1),
+      })
 
       await batch.commit()
     } catch (err) {
@@ -130,6 +143,12 @@ exports.deleteApplicants = functions.firestore
         createdAt: createdAt,
         alertStatus: 2,
       })
+      // meta update
+      const refMeta = fdb.collection('meta').doc('findPeople')
+      batch.update(refMeta, {
+        applicantionCount: admin.firestore.FieldValue.increment(-1),
+      })
+
       await batch.commit()
     } catch (err) {
       console.log(err)
@@ -187,6 +206,13 @@ exports.updateParticipants = functions.firestore
         createdAt: createdAt,
         alertStatus: alertStatus,
       })
+      // meta update
+      const refMeta = fdb.collection('meta').doc('findPeople')
+      let addNum = recruit ? 1 : -1
+      batch.update(refMeta, {
+        applicantionCount: admin.firestore.FieldValue.increment(addNum),
+      })
+
       await batch.commit()
     } catch (err) {
       console.log(err)
@@ -250,18 +276,68 @@ exports.scheduledFunction = functions.pubsub
       }
       const updateStatus3to4Length = updateStatus3to4.length
       for (let i = 0; i < updateStatus3to4Length; i++) {
-        await fdb
-          .collection('findPeople')
-          .doc(updateStatus3to4[i])
-          .update({ status: 4 })
+        const ref = fdb.collection('findPeople').doc(updateStatus3to4[i])
+        const refMeta = fdb.collection('meta').doc('findPeople')
+        const batch = fdb.batch()
+        batch.update(refMeta, {
+          findPeopleComplete: admin.firestore.FieldValue.increment(-1),
+          findPeopleExpiration: admin.firestore.FieldValue.increment(1),
+        })
+        batch.update(ref, { status: 4 })
+        await batch.commit()
       }
+
       const updateStatusNto3Length = updateStatusNto3.length
       for (let i = 0; i < updateStatusNto3Length; i++) {
-        await fdb
-          .collection('findPeople')
-          .doc(updateStatusNto3[i])
-          .update({ status: 3 })
+        const ref = fdb.collection('findPeople').doc(updateStatusNto3Length[i])
+        const refMeta = fdb.collection('meta').doc('findPeople')
+        const batch = fdb.batch()
+        if (updateStatusNto3Length[i].status === 1) {
+          batch.update(refMeta, {
+            findPeopleOpen: admin.firestore.FieldValue.increment(-1),
+            findPeopleComplete: admin.firestore.FieldValue.increment(1),
+          })
+        } else if (updateStatusNto3Length[i].status === 2) {
+          batch.update(refMeta, {
+            findPeopleClose: admin.firestore.FieldValue.increment(-1),
+            findPeopleComplete: admin.firestore.FieldValue.increment(1),
+          })
+        }
+        batch.update(ref, { status: 3 })
+        await batch.commit()
       }
+    } catch (err) {
+      console.log(err)
+    }
+  })
+
+// meta
+exports.scheduledFunctionForMeta = functions.pubsub
+  .schedule('every 60 minutes')
+  .onRun(async (context) => {
+    try {
+      const metaUser = await fdb.collection('meta').doc('users').get()
+      const metaFindPeople = await fdb
+        .collection('meta')
+        .doc('FindPeople')
+        .get()
+      const records = {
+        createUser: metaUser.createUser, // 가입
+        deleteUser: metaUser.deleteUser, // 탈퇴
+        applicantionCount: metaFindPeople.applicantionCount, // 게스트 지원
+        editCount: metaFindPeople.editCount, // 수정
+        accRecruitCount: metaFindPeople.accRecruitCount, // 누적 영입
+        recruitCount: metaFindPeople.recruitCount, // 영입
+        eliminatedCount: metaFindPeople.eliminatedCount, // 방출
+        accOpenCount: metaFindPeople.eliminatedCount, // 누적 신규
+        accCloseCount: metaFindPeople.accCloseCount, // 누적 마감
+        findPeopleOpen: metaFindPeople.findPeopleOpen, // 현재 모집
+        findPeopleClose: metaFindPeople.findPeopleClose, // 현재 마감
+        findPeopleComplete: metaFindPeople.findPeopleComplete, // 현재 완료
+        findPeopleExpiration: metaFindPeople.findPeopleExpiration, // 현재 30일 이후
+      }
+      const id = Date.now()
+      await fdb.collection('records').doc(id).set(records)
     } catch (err) {
       console.log(err)
     }

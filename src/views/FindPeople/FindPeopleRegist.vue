@@ -526,6 +526,10 @@ export default {
           .firestore()
           .collection('users')
           .doc(this.fireUser.uid)
+        const refMeta = this.$firebase
+          .firestore()
+          .collection('meta')
+          .doc('findPeople')
         const batch = await this.$firebase.firestore().batch()
 
         if (this.mode === 'regist') {
@@ -533,11 +537,21 @@ export default {
           batch.update(refUser, {
             findPeopleList: this.$firebase.firestore.FieldValue.arrayUnion(id),
           })
+          batch.update(refMeta, {
+            accOpenCount: this.$firebase.firestore.FieldValue.increment(1),
+            findPeopleOpen: this.$firebase.firestore.FieldValue.increment(1),
+          })
         } else if (this.mode === 'edit') {
           batch.update(ref, this.form)
+          batch.update(refMeta, {
+            editCount: this.$firebase.firestore.FieldValue.increment(1),
+          })
         }
+
         await batch.commit()
-        console.log('등록 성공')
+        this.$store.dispatch('openAlert', {
+          message: '게스트 모집 등록 성공',
+        })
       } catch (err) {
         this.$store.dispatch('openAlert', {
           message: '등록 실패',
@@ -571,8 +585,19 @@ export default {
               .firestore()
               .collection('findPeople')
               .doc(this.subscribedSchedule.scheduleId)
-            await ref.update({ status: 9 })
+            const refMeta = this.$firebase
+              .firestore()
+              .collection('meta')
+              .doc('findPeople')
+            const batch = await this.$firebase.firestore().batch()
+            batch.update(ref, {
+              status: 9,
+            })
+            batch.update(refMeta, {
+              deleteCount: this.$firebase.firestore.FieldValue.increment(1),
+            })
 
+            await batch.commit()
             this.$store.dispatch('openAlert', {
               message: '성공적으로 삭제되었습니다 🎾',
             })

@@ -164,7 +164,25 @@ export default {
         EventBus.$once('confirmReturn', async (answer) => {
           if (answer) {
             try {
-              await this.ref.update({ status: 1 })
+              // await this.ref.update({ status: 1 })
+              const refMeta = this.$firebase
+                .firestore()
+                .collection('meta')
+                .doc('findPeople')
+              const batch = await this.$firebase.firestore().batch()
+              batch.update(this.ref, {
+                status: 1,
+              })
+              batch.update(refMeta, {
+                findPeopleOpen: this.$firebase.firestore.FieldValue.increment(
+                  1,
+                ),
+                findPeopleClose: this.$firebase.firestore.FieldValue.increment(
+                  -1,
+                ),
+              })
+
+              await batch.commit()
               console.log('게스트 모집 상태 변경 성공')
             } catch (err) {
               this.$store.dispatch('openAlert', {
@@ -191,7 +209,25 @@ export default {
         EventBus.$once('confirmReturn', async (answer) => {
           if (answer) {
             try {
-              await this.ref.update({ status: 2 })
+              const refMeta = this.$firebase
+                .firestore()
+                .collection('meta')
+                .doc('findPeople')
+              const batch = await this.$firebase.firestore().batch()
+              batch.update(this.ref, {
+                status: 2,
+              })
+              batch.update(refMeta, {
+                accCloseCount: this.$firebase.firestore.FieldValue.increment(1),
+                findPeopleOpen: this.$firebase.firestore.FieldValue.increment(
+                  -1,
+                ),
+                findPeopleClose: this.$firebase.firestore.FieldValue.increment(
+                  1,
+                ),
+              })
+
+              await batch.commit()
               console.log('게스트 모집 마감 성공')
             } catch (err) {
               this.$store.dispatch('openAlert', {
@@ -212,10 +248,19 @@ export default {
       EventBus.$once('confirmReturn', async (answer) => {
         if (answer) {
           try {
+            const refMeta = this.$firebase
+              .firestore()
+              .collection('meta')
+              .doc('findPeople')
             const batch = await this.$firebase.firestore().batch()
             // 참여 요청자 카운트 --
             batch.update(this.ref, {
               applicantsCount: this.$firebase.firestore.FieldValue.increment(
+                -1,
+              ),
+            })
+            batch.update(refMeta, {
+              applicantionCount: this.$firebase.firestore.FieldValue.increment(
                 -1,
               ),
             })

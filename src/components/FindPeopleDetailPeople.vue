@@ -214,6 +214,10 @@ export default {
       EventBus.$once('confirmReturn', async (answer) => {
         if (answer) {
           try {
+            const refMeta = this.$firebase
+              .firestore()
+              .collection('meta')
+              .doc('findPeople')
             const batch = await this.$firebase.firestore().batch()
             batch.update(this.ref, {
               participants: this.$firebase.firestore.FieldValue.arrayRemove(
@@ -232,6 +236,11 @@ export default {
                 this.fireUser.uid,
               ),
             })
+            batch.update(refMeta, {
+              recruitCount: this.$firebase.firestore.FieldValue.increment(-1),
+              eliminatedCount: this.$firebase.firestore.FieldValue.increment(1),
+            })
+
             await batch.commit()
             this.$store.dispatch('openAlert', {
               message: '방출된 게스트에게 방출 사실을 꼭 알리세요 🎾',
@@ -263,12 +272,20 @@ export default {
       EventBus.$once('confirmReturn', async (answer) => {
         if (answer) {
           try {
+            const refMeta = this.$firebase
+              .firestore()
+              .collection('meta')
+              .doc('findPeople')
             const batch = await this.$firebase.firestore().batch()
             batch.update(this.ref, {
               participants: this.$firebase.firestore.FieldValue.arrayUnion(
                 applicant.userId,
               ),
               vacant: this.$firebase.firestore.FieldValue.increment(-1),
+            })
+            batch.update(refMeta, {
+              accRecruitCount: this.$firebase.firestore.FieldValue.increment(1),
+              recruitCount: this.$firebase.firestore.FieldValue.increment(1),
             })
             await batch.commit()
             this.$store.dispatch('openAlert', {
