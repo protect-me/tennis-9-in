@@ -255,8 +255,6 @@ export default {
           })
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '데이터를 가져오는데 실패했습니다',
         })
         console.log('데이터 로드 실패', err)
@@ -305,11 +303,9 @@ export default {
       tempEl.select()
       document.execCommand('copy')
       document.body.removeChild(tempEl)
-        this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
-          message: '연락처가 클립보드로 복사되었습니다 🎾',
-        })
+      this.$store.dispatch('openAlert', {
+        message: '연락처가 클립보드로 복사되었습니다 🎾',
+      })
     },
   },
 }

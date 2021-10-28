@@ -12,8 +12,6 @@ const onlyAuthUser = (to, from, next) => {
       next()
     } else {
       store.dispatch('openAlert', {
-        color: 'primary',
-        icon: 'mdi-alert-circle-outline',
         message: '로그인이 필요해요',
         nextBtn: true,
         nextFunction: () => {

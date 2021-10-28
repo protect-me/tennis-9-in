@@ -223,8 +223,6 @@ export default {
         console.log('로그인 성공')
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '로그인 실패',
         })
         console.log('로그인 실패', err)
@@ -254,8 +252,6 @@ export default {
           await this.$store.dispatch('setUser', null)
           await this.$store.dispatch('setFireUser', null)
           this.$store.dispatch('openAlert', {
-            color: 'primary',
-            icon: 'mdi-alert-circle-outline',
             message: '로그아웃 되었습니다!',
           })
         }

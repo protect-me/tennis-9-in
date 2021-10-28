@@ -166,6 +166,7 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
 
 export default {
@@ -233,15 +234,11 @@ export default {
             })
             await batch.commit()
             this.$store.dispatch('openAlert', {
-              color: 'primary',
-              icon: 'mdi-alert-circle-outline',
               message: '방출된 게스트에게 방출 사실을 꼭 알리세요 🎾',
             })
             console.log('게스트 방출 성공')
           } catch (err) {
             this.$store.dispatch('openAlert', {
-              color: 'primary',
-              icon: 'mdi-alert-circle-outline',
               message: '게스트 방출 실패',
             })
             console.log('게스트 방출 실패', err)
@@ -255,8 +252,6 @@ export default {
       if (this.subscribedSchedule.organizer !== this.fireUser.uid) return
       if (this.subscribedSchedule.participants.includes(applicant.userId)) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '이미 참여한 게스트입니다!',
         })
         return
@@ -277,15 +272,11 @@ export default {
             })
             await batch.commit()
             this.$store.dispatch('openAlert', {
-              color: 'primary',
-              icon: 'mdi-alert-circle-outline',
               message: '게스트 영입 성공',
             })
             console.log('게스트 영입 성공')
           } catch (err) {
             this.$store.dispatch('openAlert', {
-              color: 'primary',
-              icon: 'mdi-alert-circle-outline',
               message: '게스트 영입 실패',
             })
             console.log(err)

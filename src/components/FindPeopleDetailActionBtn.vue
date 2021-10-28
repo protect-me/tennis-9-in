@@ -168,8 +168,6 @@ export default {
               console.log('게스트 모집 상태 변경 성공')
             } catch (err) {
               this.$store.dispatch('openAlert', {
-                color: 'primary',
-                icon: 'mdi-alert-circle-outline',
                 message: '게스트 모집 상태 변경 실패',
               })
               console.log('게스트 모집 상태 변경 실패', err.message)
@@ -197,8 +195,6 @@ export default {
               console.log('게스트 모집 마감 성공')
             } catch (err) {
               this.$store.dispatch('openAlert', {
-                color: 'primary',
-                icon: 'mdi-alert-circle-outline',
                 message: '게스트 모집 마감 실패',
               })
               console.log('게스트 모집 마감 실패', err.message)
@@ -242,8 +238,6 @@ export default {
             console.log('참가 요청 취소 성공')
           } catch (err) {
             this.$store.dispatch('openAlert', {
-              color: 'primary',
-              icon: 'mdi-alert-circle-outline',
               message: '참가 요청 취소 실패',
             })
             console.log('참가 요청 취소 실패', err)
@@ -267,8 +261,6 @@ export default {
     async registApplicant() {
       if (!this.user) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '로그인이 필요해요',
           nextBtn: true,
           nextFunction: () => {
@@ -277,8 +269,6 @@ export default {
         })
       } else if (this.user && this.user.createdAt === this.user.updatedAt) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '회원 정보를 확인해주세요',
           nextBtn: true,
           nextFunction: () => {
@@ -303,8 +293,6 @@ export default {
         console.log('참가 요청 성공')
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '참가 요청 실패',
         })
         console.log('참가 요청 실패', err)

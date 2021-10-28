@@ -155,8 +155,6 @@ export default {
     goToRegist() {
       if (!this.user) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '로그인이 필요해요',
           nextBtn: true,
           nextFunction: () => {
@@ -165,8 +163,6 @@ export default {
         })
       } else if (this.user && this.user.createdAt === this.user.updatedAt) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '회원 정보를 확인해주세요',
           nextBtn: true,
           nextFunction: () => {

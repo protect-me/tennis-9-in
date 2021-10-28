@@ -120,8 +120,6 @@ export default {
         }
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '참가 요청/취소 알림 데이터 로드 실패',
         })
         console.log('참가 요청/취소 알림 데이터 로드 실패', err)

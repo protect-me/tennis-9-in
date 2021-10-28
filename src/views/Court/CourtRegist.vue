@@ -257,8 +257,6 @@ export default {
         })
         .catch((err) => {
           this.$store.dispatch('openAlert', {
-            color: 'primary',
-            icon: 'mdi-alert-circle-outline',
             message: '위도/경도 데이터를 가져오는데 실패했습니다',
           })
           console.log('위도/경도 데이터 로드 실패', err)
@@ -271,8 +269,6 @@ export default {
       }
       if (!this.fireUser.uid) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '회원 정보를 확인해주세요',
           nextBtn: true,
           nextFunction: () => {
@@ -292,8 +288,6 @@ export default {
       }
       if (this.form.types.length === 0 || this.form.courtTypes.length === 0) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '경기장 타입 혹은 코트 타입을 확인해주세요',
         })
         this.isProcessing = false
@@ -302,8 +296,6 @@ export default {
       await this.getLatLng() // 위도경도 확인
       if (!this.form.address || !this.form.lat || !this.form.lng) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '주소를 확인해주세요',
         })
         this.isProcessing = false
@@ -325,8 +317,6 @@ export default {
         console.log('등록 성공')
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '등록 실패에 실패했습니다',
         })
         console.log('등록 실패', err.message)

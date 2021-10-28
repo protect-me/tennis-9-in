@@ -144,8 +144,6 @@ export default {
         await this.filteringSchedules()
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '데이터 로드 실패',
         })
         console.log('데이터 로드 실패', err)

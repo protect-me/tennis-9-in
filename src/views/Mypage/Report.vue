@@ -117,8 +117,6 @@ export default {
         console.log('등록 성공')
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '등록 실패',
         })
         console.log('등록 실패', err.message)
@@ -132,7 +130,6 @@ export default {
   async beforeRouteLeave(to, from, next) {
     if (this.isComplete) {
       this.$store.dispatch('openAlert', {
-        color: 'primary',
         icon: 'mdi-hands-pray',
         message: '감사한 마음을 담아 피드백을 적극 반영하겠습니다 🎾',
       })

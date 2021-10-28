@@ -166,8 +166,6 @@ export default {
         await this.filteringSchedules()
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '데이터 로드 실패',
         })
         console.log('데이터 로드 실패', err)
@@ -199,8 +197,6 @@ export default {
           })
         })
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '영입된 모집만 보여집니다 🎾',
         })
       } else {

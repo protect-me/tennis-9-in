@@ -1,13 +1,14 @@
 <template>
-  <div style="width: 100%; padding: 0px 12px; background-color: white;">
+  <div style="width: 100%;">
+    <!-- outlined -->
+    <!-- text -->
     <v-alert
-      text
-      outlined
-      :color="$store.state.alertInfo.color"
       border="left"
       transition="scale-transition"
+      elevation="2"
+      color="primary"
+      style="color: white;"
     >
-      <!-- elevation="2" -->
       <!-- colored-border -->
       <div
         style="
@@ -17,19 +18,15 @@
         "
       >
         <div>
-          <v-icon
-            class="mr-1"
-            v-if="$store.state.alertInfo.icon"
-            :color="$store.state.alertInfo.color"
-          >
-            {{ $store.state.alertInfo.icon }}
-          </v-icon>
-          {{ $store.state.alertInfo.message }}
+          <span>
+            {{ $store.state.alertInfo.message }}
+          </span>
         </div>
         <v-btn
           v-if="$store.state.alertInfo.nextBtn"
           @click="btnClicked"
-          :color="$store.state.alertInfo.color"
+          color="white"
+          style="color: #ecb558;"
         >
           로그인
         </v-btn>

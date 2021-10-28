@@ -420,8 +420,6 @@ export default {
         this.courtTypes = snapshot.data().courtTypes
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '코트 타입 데이터 로드 실패',
         })
         console.log('코트 타입 데이터 로드 실패', err)
@@ -479,8 +477,6 @@ export default {
           this.form.total < this.form.vacant
         ) {
           this.$store.dispatch('openAlert', {
-            color: 'primary',
-            icon: 'mdi-alert-circle-outline',
             message: '입력한 인원을 확인해주세요!',
           })
           return
@@ -491,8 +487,6 @@ export default {
       }
       if (!this.form.contact && !this.form.openChatLink) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '연락처 혹은 오픈채팅방 링크를 입력해주세요!',
         })
         this.isProcessing = false
@@ -546,8 +540,6 @@ export default {
         console.log('등록 성공')
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '등록 실패',
         })
         console.log('등록 실패', err.message)
@@ -564,8 +556,6 @@ export default {
     async deleteBtnClicked() {
       if (this.subscribedSchedule.participants.length > 0) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '참여자가 있을 경우 모집을 삭제할 수 없습니다 🎾',
         })
         return
@@ -584,8 +574,6 @@ export default {
             await ref.update({ status: 9 })
 
             this.$store.dispatch('openAlert', {
-              color: 'primary',
-              icon: 'mdi-alert-circle-outline',
               message: '성공적으로 삭제되었습니다 🎾',
             })
             console.log('삭제 성공')

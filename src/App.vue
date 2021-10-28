@@ -52,8 +52,10 @@ export default {
   backdrop-filter: blur(5px);
 }
 .custom-alert {
-  bottom: 0;
-  left: 0;
+  width: calc(100% - 24px);
+  padding: 0 12px;
+  bottom: 0px;
+  left: 0px;
   position: absolute;
   z-index: 999;
 }

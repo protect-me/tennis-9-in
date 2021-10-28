@@ -230,8 +230,6 @@ export default {
         console.log('수정 성공')
       } catch (err) {
         this.$store.dispatch('openAlert', {
-          color: 'primary',
-          icon: 'mdi-alert-circle-outline',
           message: '수정 실패',
         })
         console.log('수정 실패', err.message)
