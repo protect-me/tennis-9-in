@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from '../plugins/firebase.js'
+import { getCookie, setCookie } from '@/plugins/cookie.js'
 
 Vue.use(Vuex)
 
@@ -152,6 +153,25 @@ export default new Vuex.Store({
         })
         console.log('데이터 로드 실패', err)
         commit('updateState', { loading: false })
+      }
+    },
+    async checkVisitCount(_, pageName) {
+      const cookieName =
+        'tennis9inVisitHistory' +
+        pageName[0].toUpperCase() +
+        pageName.slice(1, pageName.length)
+      const userHistory = getCookie(cookieName)
+      if (!userHistory) {
+        setCookie(cookieName, pageName, 1)
+        try {
+          await firebase
+            .firestore()
+            .collection('meta')
+            .doc('visit')
+            .update(pageName, firebase.firestore.FieldValue.increment(1))
+        } catch (err) {
+          console.log(err)
+        }
       }
     },
   },

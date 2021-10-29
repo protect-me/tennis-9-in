@@ -88,6 +88,7 @@ export default {
     FindPeopleCard,
   },
   mounted() {
+    this.$store.dispatch('checkVisitCount', this.$route.params.courtId)
     this.court = this.$store.state.court
     this.$nextTick(function () {
       if (!this.court.courtId) this.initCourtData()

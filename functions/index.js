@@ -98,7 +98,7 @@ exports.createApplicants = functions.firestore
       // meta update
       const refMeta = fdb.collection('meta').doc('findPeople')
       batch.update(refMeta, {
-        applicantionCount: admin.firestore.FieldValue.increment(1),
+        applicationCount: admin.firestore.FieldValue.increment(1),
       })
 
       await batch.commit()
@@ -146,7 +146,7 @@ exports.deleteApplicants = functions.firestore
       // meta update
       const refMeta = fdb.collection('meta').doc('findPeople')
       batch.update(refMeta, {
-        applicantionCount: admin.firestore.FieldValue.increment(-1),
+        applicationCount: admin.firestore.FieldValue.increment(-1),
       })
 
       await batch.commit()
@@ -210,7 +210,7 @@ exports.updateParticipants = functions.firestore
       const refMeta = fdb.collection('meta').doc('findPeople')
       let addNum = recruit ? 1 : -1
       batch.update(refMeta, {
-        applicantionCount: admin.firestore.FieldValue.increment(addNum),
+        applicationCount: admin.firestore.FieldValue.increment(addNum),
       })
 
       await batch.commit()
@@ -317,27 +317,24 @@ exports.scheduledFunctionForMeta = functions.pubsub
   .onRun(async (context) => {
     try {
       const metaUser = await fdb.collection('meta').doc('users').get()
+      const metaCourt = await fdb.collection('meta').doc('court').get()
+      const metaVisit = await fdb.collection('meta').doc('visit').get()
       const metaFindPeople = await fdb
         .collection('meta')
-        .doc('FindPeople')
+        .doc('findPeople')
         .get()
-      const records = {
-        createUser: metaUser.createUser, // 가입
-        deleteUser: metaUser.deleteUser, // 탈퇴
-        applicantionCount: metaFindPeople.applicantionCount, // 게스트 지원
-        editCount: metaFindPeople.editCount, // 수정
-        accRecruitCount: metaFindPeople.accRecruitCount, // 누적 영입
-        recruitCount: metaFindPeople.recruitCount, // 영입
-        eliminatedCount: metaFindPeople.eliminatedCount, // 방출
-        accOpenCount: metaFindPeople.eliminatedCount, // 누적 신규
-        accCloseCount: metaFindPeople.accCloseCount, // 누적 마감
-        findPeopleOpen: metaFindPeople.findPeopleOpen, // 현재 모집
-        findPeopleClose: metaFindPeople.findPeopleClose, // 현재 마감
-        findPeopleComplete: metaFindPeople.findPeopleComplete, // 현재 완료
-        findPeopleExpiration: metaFindPeople.findPeopleExpiration, // 현재 30일 이후
-      }
-      const id = Date.now()
-      await fdb.collection('records').doc(id).set(records)
+
+      const metaUserData = metaUser.data()
+      const metaCourtData = metaCourt.data()
+      const metaVisitData = metaVisit.data()
+      const metaFindPeopleData = metaFindPeople.data()
+
+      const id = String(Date.now())
+      const refRecords = fdb.collection('records').doc(id)
+      await refRecords.collection('user').doc(id).set(metaUserData)
+      await refRecords.collection('court').doc(id).set(metaCourtData)
+      await refRecords.collection('visit').doc(id).set(metaVisitData)
+      await refRecords.collection('findPeople').doc(id).set(metaFindPeopleData)
     } catch (err) {
       console.log(err)
     }

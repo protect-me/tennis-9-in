@@ -96,6 +96,9 @@ export default {
   created() {
     this.subscribe()
   },
+  mounted() {
+    this.$store.dispatch('checkVisitCount', 'courtList')
+  },
   unmounted() {
     if (this.unsubscribe) this.unsubscribe()
   },

@@ -9,6 +9,7 @@ import { mapState } from 'vuex'
 
 export default {
   mounted() {
+    this.$store.dispatch('checkVisitCount', 'map')
     window.kakao && window.kakao.maps
       ? this.initMap()
       : this.addKakaoMapScript()

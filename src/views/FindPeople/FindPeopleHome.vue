@@ -42,6 +42,7 @@ export default {
     TitleWithButton,
   },
   mounted() {
+    this.$store.dispatch('checkVisitCount', 'findPeopleHome')
     this.$nextTick(async function () {
       await this.$store.dispatch('setSchedules')
       this.tab = this.selectedTab

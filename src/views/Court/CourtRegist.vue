@@ -309,11 +309,18 @@ export default {
         const id = this.form.createdAt.getTime().toString()
         this.form.courtId = id
 
-        await this.$firebase
+        const ref = this.$firebase.firestore().collection('courts').doc(id)
+        const refMeta = this.$firebase
           .firestore()
-          .collection('courts')
-          .doc(id)
-          .set(this.form)
+          .collection('meta')
+          .doc('court')
+        const batch = await this.$firebase.firestore().batch()
+        batch.set(ref, this.form)
+        batch.update(refMeta, {
+          courtCount: this.$firebase.firestore.FieldValue.increment(1),
+        })
+        
+        await batch.commit()
         console.log('등록 성공')
       } catch (err) {
         this.$store.dispatch('openAlert', {

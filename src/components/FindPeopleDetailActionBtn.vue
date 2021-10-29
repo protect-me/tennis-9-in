@@ -260,7 +260,7 @@ export default {
               ),
             })
             batch.update(refMeta, {
-              applicantionCount: this.$firebase.firestore.FieldValue.increment(
+              applicationCount: this.$firebase.firestore.FieldValue.increment(
                 -1,
               ),
             })

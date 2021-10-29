@@ -149,6 +149,7 @@ export default {
     UserCard,
   },
   mounted() {
+    this.$store.dispatch('checkVisitCount', 'mypage')
     this.checkAdditionalInfo()
   },
   data() {
