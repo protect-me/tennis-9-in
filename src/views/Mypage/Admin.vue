@@ -12,7 +12,39 @@
 </template>
 
 <script>
-export default {}
+export default {
+  created() {
+    this.subscribe()
+  },
+  unmounted() {
+    if (this.unsubscribe) this.unsubscribe()
+  },
+  data() {
+    return {
+      unsubscribe: null,
+      loading: true,
+      records: null,
+    }
+  },
+  methods: {
+    subscribe() {
+      this.loading = true
+      this.unsubscribe = this.$firebase
+        .firestore()
+        .collection('records')
+        // .orderBy('createdAt', 'desc')
+        .onSnapshot((snapshot) => {
+          if (snapshot.empty) {
+            this.records = []
+            return
+          }
+          this.records = snapshot.docs.map((value) => {
+            console.log(value)
+          })
+        })
+    },
+  },
+}
 </script>
 
 <style></style>
