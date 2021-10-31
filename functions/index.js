@@ -289,15 +289,15 @@ exports.scheduledFunction = functions.pubsub
 
       const updateStatusNto3Length = updateStatusNto3.length
       for (let i = 0; i < updateStatusNto3Length; i++) {
-        const ref = fdb.collection('findPeople').doc(updateStatusNto3Length[i])
+        const ref = fdb.collection('findPeople').doc(updateStatusNto3[i])
         const refMeta = fdb.collection('meta').doc('findPeople')
         const batch = fdb.batch()
-        if (updateStatusNto3Length[i].status === 1) {
+        if (updateStatusNto3[i].status === 1) {
           batch.update(refMeta, {
             findPeopleOpen: admin.firestore.FieldValue.increment(-1),
             findPeopleComplete: admin.firestore.FieldValue.increment(1),
           })
-        } else if (updateStatusNto3Length[i].status === 2) {
+        } else if (updateStatusNto3[i].status === 2) {
           batch.update(refMeta, {
             findPeopleClose: admin.firestore.FieldValue.increment(-1),
             findPeopleComplete: admin.firestore.FieldValue.increment(1),
