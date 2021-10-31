@@ -254,8 +254,10 @@ export default {
             }
           })
       } catch (err) {
-        alert('데이터를 가져오는데 실패했습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('데이터 로드 실패', err)
       } finally {
         if (this.organizerIndex !== 0) {
           let tmp = Object.assign(this.participants[0])
@@ -301,7 +303,9 @@ export default {
       tempEl.select()
       document.execCommand('copy')
       document.body.removeChild(tempEl)
-      alert('연락처가 클립보드로 복사되었습니다 🎾')
+      this.$store.dispatch('openAlert', {
+        message: '연락처가 클립보드로 복사되었습니다 🎾',
+      })
     },
   },
 }

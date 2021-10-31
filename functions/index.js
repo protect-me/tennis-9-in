@@ -32,12 +32,20 @@ exports.createUser = functions.auth.user().onCreate(async (user) => {
     alertParticipationToggle: false,
   }
   await fdb.collection('users').doc(uid).set(userInfo) // set user at Firestore
+  await fdb
+    .collection('meta')
+    .doc('users')
+    .update({ createUser: admin.firestore.FieldValue.increment(1) })
   db.ref('users').child(uid).set(userInfo) // set user at RealTime Database
 })
 
 exports.deleteUser = functions.auth.user().onDelete(async (user) => {
   const { uid } = user
   await db.ref('users').child(uid).remove()
+  await fdb
+    .collection('meta')
+    .doc('users')
+    .update({ deleteUser: admin.firestore.FieldValue.increment() })
   await fdb.collection('users').doc(uid).delete()
 })
 
@@ -87,6 +95,11 @@ exports.createApplicants = functions.firestore
           alertStatus: 1,
         }, // 신규 게스트 참여 요청 알림
       )
+      // meta update
+      const refMeta = fdb.collection('meta').doc('findPeople')
+      batch.update(refMeta, {
+        applicationCount: admin.firestore.FieldValue.increment(1),
+      })
 
       await batch.commit()
     } catch (err) {
@@ -130,6 +143,12 @@ exports.deleteApplicants = functions.firestore
         createdAt: createdAt,
         alertStatus: 2,
       })
+      // meta update
+      const refMeta = fdb.collection('meta').doc('findPeople')
+      batch.update(refMeta, {
+        applicationCount: admin.firestore.FieldValue.increment(-1),
+      })
+
       await batch.commit()
     } catch (err) {
       console.log(err)
@@ -187,6 +206,13 @@ exports.updateParticipants = functions.firestore
         createdAt: createdAt,
         alertStatus: alertStatus,
       })
+      // meta update
+      const refMeta = fdb.collection('meta').doc('findPeople')
+      let addNum = recruit ? 1 : -1
+      batch.update(refMeta, {
+        applicationCount: admin.firestore.FieldValue.increment(addNum),
+      })
+
       await batch.commit()
     } catch (err) {
       console.log(err)
@@ -250,18 +276,65 @@ exports.scheduledFunction = functions.pubsub
       }
       const updateStatus3to4Length = updateStatus3to4.length
       for (let i = 0; i < updateStatus3to4Length; i++) {
-        await fdb
-          .collection('findPeople')
-          .doc(updateStatus3to4[i])
-          .update({ status: 4 })
+        const ref = fdb.collection('findPeople').doc(updateStatus3to4[i])
+        const refMeta = fdb.collection('meta').doc('findPeople')
+        const batch = fdb.batch()
+        batch.update(refMeta, {
+          findPeopleComplete: admin.firestore.FieldValue.increment(-1),
+          findPeopleExpiration: admin.firestore.FieldValue.increment(1),
+        })
+        batch.update(ref, { status: 4 })
+        await batch.commit()
       }
+
       const updateStatusNto3Length = updateStatusNto3.length
       for (let i = 0; i < updateStatusNto3Length; i++) {
-        await fdb
-          .collection('findPeople')
-          .doc(updateStatusNto3[i])
-          .update({ status: 3 })
+        const ref = fdb.collection('findPeople').doc(updateStatusNto3Length[i])
+        const refMeta = fdb.collection('meta').doc('findPeople')
+        const batch = fdb.batch()
+        if (updateStatusNto3Length[i].status === 1) {
+          batch.update(refMeta, {
+            findPeopleOpen: admin.firestore.FieldValue.increment(-1),
+            findPeopleComplete: admin.firestore.FieldValue.increment(1),
+          })
+        } else if (updateStatusNto3Length[i].status === 2) {
+          batch.update(refMeta, {
+            findPeopleClose: admin.firestore.FieldValue.increment(-1),
+            findPeopleComplete: admin.firestore.FieldValue.increment(1),
+          })
+        }
+        batch.update(ref, { status: 3 })
+        await batch.commit()
       }
+    } catch (err) {
+      console.log(err)
+    }
+  })
+
+// meta
+exports.scheduledFunctionForMeta = functions.pubsub
+  .schedule('every 60 minutes')
+  .onRun(async (context) => {
+    try {
+      const metaUser = await fdb.collection('meta').doc('users').get()
+      const metaCourt = await fdb.collection('meta').doc('court').get()
+      const metaVisit = await fdb.collection('meta').doc('visit').get()
+      const metaFindPeople = await fdb
+        .collection('meta')
+        .doc('findPeople')
+        .get()
+
+      const metaUserData = metaUser.data()
+      const metaCourtData = metaCourt.data()
+      const metaVisitData = metaVisit.data()
+      const metaFindPeopleData = metaFindPeople.data()
+
+      const id = String(Date.now())
+      const refRecords = fdb.collection('records').doc(id)
+      await refRecords.set(metaUserData)
+      await refRecords.update(metaCourtData)
+      await refRecords.update(metaVisitData)
+      await refRecords.update(metaFindPeopleData)
     } catch (err) {
       console.log(err)
     }

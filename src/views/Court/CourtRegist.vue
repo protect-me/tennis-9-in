@@ -144,6 +144,7 @@
 
 <script>
 import axios from 'axios'
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
 import { VueDaumPostcode } from 'vue-daum-postcode'
 import TitleWithButton from '../../components/TitleWithButton'
@@ -255,8 +256,10 @@ export default {
           this.form.lng = res.data.documents[0].x
         })
         .catch((err) => {
-          alert('위도/경도를 가져오는데 실패했습니다.', err)
-          console.log(err)
+          this.$store.dispatch('openAlert', {
+            message: '위도/경도 데이터를 가져오는데 실패했습니다',
+          })
+          console.log('위도/경도 데이터 로드 실패', err)
         })
     },
     async apply() {
@@ -265,7 +268,13 @@ export default {
         return
       }
       if (!this.fireUser.uid) {
-        alert('회원 정보가 확인되지 않습니다. 다시 로그인해주세요!')
+        this.$store.dispatch('openAlert', {
+          message: '회원 정보를 확인해주세요',
+          nextBtn: true,
+          nextFunction: () => {
+            this.$router.push({ name: 'Mypage' })
+          },
+        })
         return
       }
       this.isProcessing = true
@@ -278,13 +287,17 @@ export default {
         return
       }
       if (this.form.types.length === 0 || this.form.courtTypes.length === 0) {
-        alert('경기장 타입 혹은 코트 타입을 확인해주세요')
+        this.$store.dispatch('openAlert', {
+          message: '경기장 타입 혹은 코트 타입을 확인해주세요',
+        })
         this.isProcessing = false
         return
       }
       await this.getLatLng() // 위도경도 확인
       if (!this.form.address || !this.form.lat || !this.form.lng) {
-        alert('주소를 확인해주세요')
+        this.$store.dispatch('openAlert', {
+          message: '주소를 확인해주세요',
+        })
         this.isProcessing = false
         return
       }
@@ -296,14 +309,23 @@ export default {
         const id = this.form.createdAt.getTime().toString()
         this.form.courtId = id
 
-        await this.$firebase
+        const ref = this.$firebase.firestore().collection('courts').doc(id)
+        const refMeta = this.$firebase
           .firestore()
-          .collection('courts')
-          .doc(id)
-          .set(this.form)
+          .collection('meta')
+          .doc('court')
+        const batch = await this.$firebase.firestore().batch()
+        batch.set(ref, this.form)
+        batch.update(refMeta, {
+          courtCount: this.$firebase.firestore.FieldValue.increment(1),
+        })
+        
+        await batch.commit()
         console.log('등록 성공')
       } catch (err) {
-        alert('등록에 실패했습니다.', err.message)
+        this.$store.dispatch('openAlert', {
+          message: '등록 실패에 실패했습니다',
+        })
         console.log('등록 실패', err.message)
       } finally {
         this.isProcessing = false
@@ -313,18 +335,17 @@ export default {
       this.$router.push({ name: 'CourtList' })
     },
   },
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     if (this.isComplete) {
       next()
     } else {
-      const answer = window.confirm(
-        '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
-      )
-      if (answer) {
-        next()
-      } else {
-        next(false)
-      }
+      await this.$store.dispatch('openConfirm', {
+        message: '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) next()
+        else return
+      })
     }
   },
 }

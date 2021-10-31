@@ -12,7 +12,7 @@
 
     <v-card class="mb-2" nav :to="'FindPeopleHome'">
       <v-card-subtitle>
-        <v-icon class="mr-3">mdi-account-group-ouhelltline</v-icon>
+        <v-icon class="mr-3">mdi-account-search-outline</v-icon>
         <span>게스트 모집</span>
       </v-card-subtitle>
       <v-card-text>
@@ -48,7 +48,7 @@
 
     <v-card class="mb-2" nav :to="'Mypage'">
       <v-card-subtitle>
-        <v-icon class="mr-3">mdi-map-search-outline</v-icon>
+        <v-icon class="mr-3">mdi-account-circle-outline</v-icon>
         <span>마이페이지</span>
       </v-card-subtitle>
       <v-card-text>
@@ -66,6 +66,35 @@
 <script>
 export default {
   name: 'Home',
+  mounted() {
+    this.$store.dispatch('checkVisitCount', 'home')
+    console.log(this.$route.name)
+    console.log(this.$route.fullPath)
+  },
+  methods: {
+    checkVisitCount(pageName) {
+      const cookieName =
+        'tennis9inVisitHistory' +
+        pageName[0].toUpperCase() +
+        pageName.slice(1, pageName.length)
+      const userHistory = getCookie(cookieName)
+      if (!userHistory) {
+        setCookie(cookieName, pageName, 1)
+        this.visitCountUp(pageName)
+      }
+    },
+    async visitCountUp(pageName) {
+      try {
+        await this.$firebase
+          .firestore()
+          .collection('meta')
+          .doc('visit')
+          .update(pageName, this.$firebase.firestore.FieldValue.increment(1))
+      } catch (err) {
+        console.log(err)
+      }
+    },
+  },
 }
 </script>
 

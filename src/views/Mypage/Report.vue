@@ -42,8 +42,9 @@
 </template>
 
 <script>
-import TitleWithButton from '../../components/TitleWithButton'
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
+import TitleWithButton from '../../components/TitleWithButton'
 
 export default {
   components: {
@@ -92,10 +93,6 @@ export default {
         console.log('isProcessing!')
         return
       }
-      if (!this.fireUser.uid) {
-        alert('회원 정보가 확인되지 않습니다. 다시 로그인해주세요!')
-        return
-      }
       this.isProcessing = true
       this.form.userId = this.fireUser.uid
 
@@ -119,7 +116,9 @@ export default {
           .set(this.form)
         console.log('등록 성공')
       } catch (err) {
-        alert('등록에 실패했습니다.', err.message)
+        this.$store.dispatch('openAlert', {
+          message: '등록 실패',
+        })
         console.log('등록 실패', err.message)
       } finally {
         this.isProcessing = false
@@ -128,20 +127,26 @@ export default {
       this.$router.go(-1)
     },
   },
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     if (this.isComplete) {
-      alert('감사한 마음을 담아 피드백을 적극 반영하겠습니다 🎾')
+      this.$store.dispatch('openAlert', {
+        icon: 'mdi-hands-pray',
+        message: '감사한 마음을 담아 피드백을 적극 반영하겠습니다 🎾',
+      })
       next()
     } else if (this.form.content.length === 0) {
       next()
     } else {
-      const answer = window.confirm(
-        '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
-      )
-      if (answer) {
+      if (this.isComplete || this.checkSameData()) {
         next()
       } else {
-        next(false)
+        await this.$store.dispatch('openConfirm', {
+          message: '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
+        })
+        EventBus.$once('confirmReturn', async (answer) => {
+          if (answer) next()
+          else return
+        })
       }
     }
   },

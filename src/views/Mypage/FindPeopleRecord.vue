@@ -143,8 +143,10 @@ export default {
           })
         await this.filteringSchedules()
       } catch (err) {
-        alert('데이터를 가져오는데 실패했습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '데이터 로드 실패',
+        })
+        console.log('데이터 로드 실패', err)
       }
     },
     filteringSchedules() {

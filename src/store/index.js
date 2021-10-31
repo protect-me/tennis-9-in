@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from '../plugins/firebase.js'
+import { getCookie, setCookie } from '@/plugins/cookie.js'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     schedule: {},
     court: {},
     selectedTab: null,
+    alertInfo: null,
+    confirmToggle: false,
+    confirmInfo: null,
   },
   getters: {
     unsubscribeFindPeople(state) {
@@ -37,9 +41,40 @@ export default new Vuex.Store({
     setUser(state, payload) {
       state.user = payload
     },
+    openAlert(state, payload) {
+      state.alertInfo = payload
+    },
+    closeAlert(state, payload) {
+      if (state.alertInfo) {
+        state.alertInfo = payload
+      }
+    },
+    openConfirm(state, payload) {
+      state.confirmToggle = true
+      state.confirmInfo = payload
+    },
+    closeConfirm(state) {
+      state.confirmToggle = false
+      state.confirmInfo = null
+    },
   },
   actions: {
     // dispatch
+    openAlert({ commit }, payload) {
+      commit('openAlert', payload)
+      setTimeout(() => {
+        commit('closeAlert', null)
+      }, 2000)
+    },
+    closeAlert({ commit }) {
+      commit('openAlert', null)
+    },
+    openConfirm({ commit }, payload) {
+      commit('openConfirm', payload)
+    },
+    closeConfirm({ commit }) {
+      commit('closeConfirm')
+    },
     setFireUser({ commit }, payload) {
       commit('setFireUser', payload)
     },
@@ -113,9 +148,30 @@ export default new Vuex.Store({
             })
           })
       } catch (err) {
-        alert('데이터를 가져오는데 실패했습니다', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('데이터 로드 실패', err)
         commit('updateState', { loading: false })
+      }
+    },
+    async checkVisitCount(_, pageName) {
+      const cookieName =
+        'tennis9inVisitHistory' +
+        pageName[0].toUpperCase() +
+        pageName.slice(1, pageName.length)
+      const userHistory = getCookie(cookieName)
+      if (!userHistory) {
+        setCookie(cookieName, pageName, 1)
+        try {
+          await firebase
+            .firestore()
+            .collection('meta')
+            .doc('visit')
+            .update(pageName, firebase.firestore.FieldValue.increment(1))
+        } catch (err) {
+          console.log(err)
+        }
       }
     },
   },

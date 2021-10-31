@@ -31,7 +31,7 @@
 
     <v-divider class="my-3"></v-divider>
 
-    <v-list nav class="py-0">
+    <v-list nav>
       <!-- 게스트 모집 -->
       <v-list-group :value="user && user.alertApplicationToggle" no-action>
         <template v-slot:activator>
@@ -104,6 +104,16 @@
         </v-list-item-content>
       </v-list-item>
 
+      <!-- 관리자(Admin) -->
+      <v-list-item v-if="user && user.level === 0" @click="goToAdmin">
+        <v-list-item-icon>
+          <v-icon>mdi-shield-crown-outline</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>관리자 페이지</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
       <!-- 로그아웃 -->
       <v-list-item v-if="fireUser" @click="logout">
         <v-list-item-icon>
@@ -130,21 +140,22 @@
 </template>
 
 <script>
-import UserCard from '../../components/UserCard'
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
+import UserCard from '../../components/UserCard'
 
 export default {
   components: {
     UserCard,
   },
   mounted() {
+    this.$store.dispatch('checkVisitCount', 'mypage')
     this.checkAdditionalInfo()
   },
   data() {
     return {
       addtionalUserInfoToggle: false,
       isProcessing: false,
-      // selectedItem: 0,
 
       findPeopleGroup: [
         {
@@ -212,8 +223,10 @@ export default {
         const snapshot = await this.$firebase.auth().signInWithPopup(provider)
         console.log('로그인 성공')
       } catch (err) {
-        alert('로그인에 실패했습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '로그인 실패',
+        })
+        console.log('로그인 실패', err)
       } finally {
         this.isProcessing = false
       }
@@ -231,13 +244,19 @@ export default {
       }
     },
     async logout() {
-      const answer = window.confirm('로그아웃 하시겠습니까?')
-      if (answer) {
-        this.$firebase.auth().signOut()
-        await this.$store.dispatch('setUser', null)
-        await this.$store.dispatch('setFireUser', null)
-        alert('로그아웃 되었습니다')
-      }
+      await this.$store.dispatch('openConfirm', {
+        message: '로그아웃 하시겠습니까?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) {
+          this.$firebase.auth().signOut()
+          await this.$store.dispatch('setUser', null)
+          await this.$store.dispatch('setFireUser', null)
+          this.$store.dispatch('openAlert', {
+            message: '로그아웃 되었습니다!',
+          })
+        }
+      })
     },
     toggleDarkMode() {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark
@@ -245,6 +264,9 @@ export default {
         'Tennis9InDarkTheme',
         this.$vuetify.theme.dark.toString(),
       )
+    },
+    goToAdmin() {
+      this.$router.push({ name: 'Admin' })
     },
   },
 }

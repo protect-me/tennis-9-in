@@ -88,6 +88,7 @@ export default {
     FindPeopleCard,
   },
   mounted() {
+    this.$store.dispatch('checkVisitCount', this.$route.params.courtId)
     this.court = this.$store.state.court
     this.$nextTick(function () {
       if (!this.court.courtId) this.initCourtData()
@@ -119,8 +120,10 @@ export default {
           .get()
         this.court = courtInfo.data()
       } catch (err) {
-        alert('court 정보 확인 실패', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('court 데이터 로드 실패', err)
       }
     },
     async initSchedulesData() {
@@ -160,8 +163,10 @@ export default {
             }
           })
       } catch (err) {
-        alert('schedule 정보 확인 실패', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('schedule 데이터 로드 실패', err)
       }
     },
   },

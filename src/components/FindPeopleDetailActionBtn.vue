@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
 import UserCard from './UserCard'
 
@@ -157,16 +158,42 @@ export default {
         this.subscribedSchedule.status === 2 &&
         this.subscribedSchedule.organizer === this.fireUser.uid
       ) {
-        const answer = window.confirm('게스트 모집 상태로 변경할까요?')
-        if (answer) {
-          try {
-            await this.ref.update({ status: 1 })
-            console.log('게스트 모집 상태 변경 성공')
-          } catch (err) {
-            alert('게스트 모집 상태 변경 실패', err.message)
-            console.log('게스트 모집 상태 변경 실패', err.message)
+        await this.$store.dispatch('openConfirm', {
+          message: '게스트 모집 상태로 변경할까요?',
+        })
+        EventBus.$once('confirmReturn', async (answer) => {
+          if (answer) {
+            try {
+              // await this.ref.update({ status: 1 })
+              const refMeta = this.$firebase
+                .firestore()
+                .collection('meta')
+                .doc('findPeople')
+              const batch = await this.$firebase.firestore().batch()
+              batch.update(this.ref, {
+                status: 1,
+              })
+              batch.update(refMeta, {
+                findPeopleOpen: this.$firebase.firestore.FieldValue.increment(
+                  1,
+                ),
+                findPeopleClose: this.$firebase.firestore.FieldValue.increment(
+                  -1,
+                ),
+              })
+
+              await batch.commit()
+              console.log('게스트 모집 상태 변경 성공')
+            } catch (err) {
+              this.$store.dispatch('openAlert', {
+                message: '게스트 모집 상태 변경 실패',
+              })
+              console.log('게스트 모집 상태 변경 실패', err.message)
+            }
+          } else {
+            return
           }
-        }
+        })
       } else {
         return
       }
@@ -176,58 +203,100 @@ export default {
         this.subscribedSchedule.status === 1 &&
         this.subscribedSchedule.organizer === this.fireUser.uid
       ) {
-        const answer = window.confirm('게스트 모집을 마감할까요?')
-        if (answer) {
-          try {
-            await this.ref.update({ status: 2 })
-            console.log('게스트 모집 마감 성공')
-          } catch (err) {
-            alert('게스트 모집 마감 실패', err.message)
-            console.log('게스트 모집 마감 실패', err.message)
+        await this.$store.dispatch('openConfirm', {
+          message: '게스트 모집을 마감할까요?',
+        })
+        EventBus.$once('confirmReturn', async (answer) => {
+          if (answer) {
+            try {
+              const refMeta = this.$firebase
+                .firestore()
+                .collection('meta')
+                .doc('findPeople')
+              const batch = await this.$firebase.firestore().batch()
+              batch.update(this.ref, {
+                status: 2,
+              })
+              batch.update(refMeta, {
+                accCloseCount: this.$firebase.firestore.FieldValue.increment(1),
+                findPeopleOpen: this.$firebase.firestore.FieldValue.increment(
+                  -1,
+                ),
+                findPeopleClose: this.$firebase.firestore.FieldValue.increment(
+                  1,
+                ),
+              })
+
+              await batch.commit()
+              console.log('게스트 모집 마감 성공')
+            } catch (err) {
+              this.$store.dispatch('openAlert', {
+                message: '게스트 모집 마감 실패',
+              })
+              console.log('게스트 모집 마감 실패', err.message)
+            }
+          } else {
+            return
           }
-        }
-      } else {
-        return
+        })
       }
     },
     async cancleApply() {
-      const answer = window.confirm('참가 요청을 취소하시겠어요?')
-      if (answer) {
-        try {
-          const batch = await this.$firebase.firestore().batch()
-          // 참여 요청자 카운트 --
-          batch.update(this.ref, {
-            applicantsCount: this.$firebase.firestore.FieldValue.increment(-1),
-          })
-          batch.delete(this.ref.collection('applicants').doc(this.fireUser.uid))
-
-          // 참여 요청자가 참가자로 등록되어 있을 경우 제거 후 vacant update
-          if (
-            this.subscribedSchedule.participants.includes(this.fireUser.uid)
-          ) {
+      await this.$store.dispatch('openConfirm', {
+        message: '참가 요청을 취소하시겠어요?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) {
+          try {
+            const refMeta = this.$firebase
+              .firestore()
+              .collection('meta')
+              .doc('findPeople')
+            const batch = await this.$firebase.firestore().batch()
+            // 참여 요청자 카운트 --
             batch.update(this.ref, {
-              vacant: this.$firebase.firestore.FieldValue.increment(1),
-              participants: this.$firebase.firestore.FieldValue.arrayRemove(
-                this.fireUser.uid,
+              applicantsCount: this.$firebase.firestore.FieldValue.increment(
+                -1,
               ),
             })
-          }
-          await batch.commit()
-          console.log('참가 요청 취소 성공')
-        } catch (err) {
-          alert('참가 요청 취소 실패', err)
-          console.log(err)
-        } finally {
-          const deleteIndex = this.applicants.findIndex(
-            (v) => (v.userId = this.fireUser.uid),
-          )
-          if (deleteIndex > 0) {
-            this.applicants.splice(deleteIndex, 1)
+            batch.update(refMeta, {
+              applicationCount: this.$firebase.firestore.FieldValue.increment(
+                -1,
+              ),
+            })
+            batch.delete(
+              this.ref.collection('applicants').doc(this.fireUser.uid),
+            )
+
+            // 참여 요청자가 참가자로 등록되어 있을 경우 제거 후 vacant update
+            if (
+              this.subscribedSchedule.participants.includes(this.fireUser.uid)
+            ) {
+              batch.update(this.ref, {
+                vacant: this.$firebase.firestore.FieldValue.increment(1),
+                participants: this.$firebase.firestore.FieldValue.arrayRemove(
+                  this.fireUser.uid,
+                ),
+              })
+            }
+            await batch.commit()
+            console.log('참가 요청 취소 성공')
+          } catch (err) {
+            this.$store.dispatch('openAlert', {
+              message: '참가 요청 취소 실패',
+            })
+            console.log('참가 요청 취소 실패', err)
+          } finally {
+            const deleteIndex = this.applicants.findIndex(
+              (v) => (v.userId = this.fireUser.uid),
+            )
+            if (deleteIndex > 0) {
+              this.applicants.splice(deleteIndex, 1)
+            }
           }
         }
-      }
+      })
     },
-
     openApplyDialog() {
       this.applyDialogToggle = true
     },
@@ -236,11 +305,21 @@ export default {
     },
     async registApplicant() {
       if (!this.user) {
-        alert('로그인이 필요해요 🎾')
-        this.$router.push({ name: 'Mypage' })
+        this.$store.dispatch('openAlert', {
+          message: '로그인이 필요해요',
+          nextBtn: true,
+          nextFunction: () => {
+            this.$router.push({ name: 'Mypage' })
+          },
+        })
       } else if (this.user && this.user.createdAt === this.user.updatedAt) {
-        alert('회원 정보를 확인해주세요 🎾')
-        this.$router.push({ name: 'Mypage' })
+        this.$store.dispatch('openAlert', {
+          message: '회원 정보를 확인해주세요',
+          nextBtn: true,
+          nextFunction: () => {
+            this.$router.push({ name: 'Mypage' })
+          },
+        })
       }
       await this.$refs.form.validate()
       if (!this.valid) return
@@ -258,7 +337,9 @@ export default {
         await batch.commit()
         console.log('참가 요청 성공')
       } catch (err) {
-        alert('참가 요청 실패', err)
+        this.$store.dispatch('openAlert', {
+          message: '참가 요청 실패',
+        })
         console.log('참가 요청 실패', err)
       } finally {
         this.comment = ''

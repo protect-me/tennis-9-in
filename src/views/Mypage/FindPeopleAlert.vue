@@ -119,8 +119,10 @@ export default {
             .update({ alertApplicationToggle: false })
         }
       } catch (err) {
-        alert('참가 요청/취소 알림을 가져오는게 실패했습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '참가 요청/취소 알림 데이터 로드 실패',
+        })
+        console.log('참가 요청/취소 알림 데이터 로드 실패', err)
       }
     },
   },

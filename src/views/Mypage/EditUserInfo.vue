@@ -108,6 +108,7 @@
 </template>
 
 <script>
+import { EventBus } from '@/utils/EventBus'
 import { mapState } from 'vuex'
 import HelpNtrp from '../../components/HelpNtrp'
 import TitleWithButton from '../../components/TitleWithButton'
@@ -228,7 +229,9 @@ export default {
           .update(this.form)
         console.log('수정 성공')
       } catch (err) {
-        alert('수정 실패', err.message)
+        this.$store.dispatch('openAlert', {
+          message: '수정 실패',
+        })
         console.log('수정 실패', err.message)
       } finally {
         this.isProcessing = false
@@ -245,18 +248,17 @@ export default {
       this.helpNtrpToggle = false
     },
   },
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     if (this.isComplete || this.checkSameData()) {
       next()
     } else {
-      const answer = window.confirm(
-        '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
-      )
-      if (answer) {
-        next()
-      } else {
-        next(false)
-      }
+      await this.$store.dispatch('openConfirm', {
+        message: '저장되지 않은 작업이 있습니다! 정말 나갈까요?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) next()
+        else return
+      })
     }
   },
 }

@@ -119,8 +119,10 @@ export default {
             .update({ alertParticipationToggle: false })
         }
       } catch (err) {
-        alert('영입/방출 알림을 가져오는게 실패했습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '영입/방출 알림 데이터 로드 실패',
+        })
+        console.log('영입/방출 알림 데이터 로드 실패', err)
       }
     },
   },

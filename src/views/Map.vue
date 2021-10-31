@@ -9,6 +9,7 @@ import { mapState } from 'vuex'
 
 export default {
   mounted() {
+    this.$store.dispatch('checkVisitCount', 'map')
     window.kakao && window.kakao.maps
       ? this.initMap()
       : this.addKakaoMapScript()
@@ -69,8 +70,10 @@ export default {
           }
         })
       } catch (err) {
-        alert('데이터를 가져올 수 없습니다.', err)
-        console.log(err)
+        this.$store.dispatch('openAlert', {
+          message: '데이터를 가져오는데 실패했습니다',
+        })
+        console.log('데이터 로드 실패', err)
       }
       this.setMarker()
     },
