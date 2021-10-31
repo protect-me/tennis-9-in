@@ -55,7 +55,7 @@ export default {
   width: calc(100% - 24px);
   padding: 0 12px;
   left: 0px;
-  bottom: calc((1vh - var(--customVH, 1vh)) * 100 / 2);
+  bottom: calc((1vh - var(--customVH, 1vh)) * 100);
   position: absolute;
   z-index: 999;
 }

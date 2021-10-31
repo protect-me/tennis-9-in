@@ -217,7 +217,7 @@ td {
   padding: 0px 8px !important;
 }
 #report {
-  bottom: calc((1vh - var(--customVH, 1vh)) * 100 / 2);
+  bottom: calc((1vh - var(--customVH, 1vh)) * 100);
   right: 0;
   position: absolute;
   margin: 16px;
