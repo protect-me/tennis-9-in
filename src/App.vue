@@ -41,28 +41,25 @@ export default {
         this.$vuetify.theme.dark = false
       }
     }
-    this.setHeight()
+    // this.setHeight()
   },
-  methods: {
-    setHeight() {
-      let customVH = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--customVH', `${customVH}px`)
-      window.addEventListener('resize', () => {
-        let customVH = window.innerHeight * 0.01
-        document.documentElement.style.setProperty(
-          '--customVH',
-          `${customVH}px`,
-        )
-      })
-    },
-  },
+  // methods: {
+  //   setHeight() {
+  //     let customVH = window.innerHeight * 0.01
+  //     document.documentElement.style.setProperty('--customVH', `${customVH}px`)
+  //     window.addEventListener('resize', () => {
+  //       let customVH = window.innerHeight * 0.01
+  //       document.documentElement.style.setProperty(
+  //         '--customVH',
+  //         `${customVH}px`,
+  //       )
+  //     })
+  //   },
+  // },
 }
 </script>
 
 <style lang="scss">
-#app-container {
-  height: calc(var(--customVH, 1vh) * 100);
-}
 .v-overlay--active {
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3);
   -webkit-backdrop-filter: blur(5px);

@@ -29,5 +29,16 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      let customVH = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--customVH', customVH + 'px')
+      window.addEventListener('resize', () => {
+        let customVH = window.innerHeight * 0.01
+        document.documentElement.style.setProperty(
+          '--customVH',
+          customVH + 'px',
+        )
+      })
+    </script>
   </body>
 </html>
