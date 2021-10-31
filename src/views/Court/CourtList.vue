@@ -201,12 +201,12 @@ export default {
 <style lang="scss">
 .court-list-container {
   width: 100%;
-  height: calc(100vh - 48px);
+  height: calc(var(--customVH, 1vh) * 100 - 48px);
   display: flex;
   flex-direction: column;
   .court-list-content {
     width: 100%;
-    height: calc(100vh - 134px);
+    height: calc(var(--customVH, 1vh) * 100 - 134px);
     overflow: scroll;
   }
 }

@@ -68,8 +68,11 @@ export default {
   name: 'Home',
   mounted() {
     this.$store.dispatch('checkVisitCount', 'home')
-    console.log(this.$route.name)
-    console.log(this.$route.fullPath)
+  },
+  computed: {
+    cssVariable() {
+      return { '--customVH': this.$store.state.customVH }
+    },
   },
   methods: {
     checkVisitCount(pageName) {
@@ -98,9 +101,9 @@ export default {
 }
 </script>
 
-<style scoped lang="scss" scoped>
+<style scoped lang="scss">
 .home-container {
-  height: calc(100vh - 48px);
+  height: calc(var(--customVH, 1vh) * 100 - 48px);
   overflow: scroll;
 }
 .main-img {

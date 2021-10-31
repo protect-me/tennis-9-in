@@ -313,11 +313,11 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-detail-container {
-  height: calc(100vh - 48px);
+  height: calc(var(--customVH, 1vh) * 100 - 48px);
   display: flex;
   flex-direction: column;
   .find-people-detail-content {
-    height: calc(100vh - 180px);
+    height: calc(var(--customVH, 1vh) * 100 - 180px);
     overflow: scroll;
   }
   .compelete-btn {
