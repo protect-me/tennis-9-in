@@ -201,17 +201,17 @@ export default {
 <style lang="scss">
 .court-list-container {
   width: 100%;
-  height: calc(100vh - 48px);
+  height: calc(100% - 48px);
   display: flex;
   flex-direction: column;
   .court-list-content {
     width: 100%;
-    height: calc(100vh - 134px);
+    height: calc(100% - 134px);
     overflow: scroll;
   }
 }
 .court-list-container.fullscreen {
-  height: 100vh;
+  height: 100%;
 }
 td {
   padding: 0px 8px !important;

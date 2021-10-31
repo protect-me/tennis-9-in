@@ -635,11 +635,11 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-regist-container {
-  height: calc(100vh - 48px);
+  height: calc(100% - 48px);
   display: flex;
   flex-direction: column;
   .find-people-regist-content {
-    height: calc(100vh - 180px);
+    height: calc(100% - 180px);
     overflow: scroll;
     .custom-box {
       border: 1px solid rgba(0, 0, 0, 0.42) !important;
@@ -658,9 +658,9 @@ export default {
   }
 }
 .find-people-regist-container.edit-mode {
-  height: 100vh;
+  height: 100%;
   .find-people-regist-content {
-    height: calc(100vh - 12px);
+    height: calc(100% - 12px);
     overflow: scroll;
   }
 }

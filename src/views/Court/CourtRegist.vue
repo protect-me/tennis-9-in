@@ -319,7 +319,7 @@ export default {
         batch.update(refMeta, {
           courtCount: this.$firebase.firestore.FieldValue.increment(1),
         })
-        
+
         await batch.commit()
         console.log('등록 성공')
       } catch (err) {
@@ -354,11 +354,11 @@ export default {
 <style lang="scss" scoped>
 .court-regist-container {
   width: 100%;
-  height: calc(100vh - 48px);
+  height: calc(100% - 48px);
   display: flex;
   flex-direction: column;
   .court-regist-content {
-    height: calc(100vh - 180px);
+    height: calc(100% - 180px);
     overflow: scroll;
   }
   .compelete-btn {

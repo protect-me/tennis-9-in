@@ -54,7 +54,6 @@ export default {
       }
       this.recordsFindPeople.data.labels = this.labels.slice().map((label) => {
         const date = new Date(Number(label))
-        console.log(label, date)
         return `${date.getFullYear()}/${
           date.getMonth() + 1
         }/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
