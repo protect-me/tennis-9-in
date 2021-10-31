@@ -175,12 +175,12 @@ export default {
 
 <style lang="scss" scoped>
 .court-detail-container {
-  height: calc(100% - 48px);
+  height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
   overflow: scroll;
   .court-detail-content {
-    height: calc(100% - 120px);
+    height: calc(100vh - 120px);
     overflow: scroll;
     .detail-row {
       margin-bottom: 8px;

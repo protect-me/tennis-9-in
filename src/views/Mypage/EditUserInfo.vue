@@ -267,11 +267,11 @@ export default {
 <style lang="scss" scoped>
 .edit-user-info-container {
   width: 100%;
-  height: calc(100% - 48px);
+  height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
   .edit-user-info-content {
-    height: calc(100% - 133px);
+    height: calc(100vh - 133px);
     overflow: scroll;
     .custom-box {
       border: 1px solid rgba(0, 0, 0, 0.42) !important;

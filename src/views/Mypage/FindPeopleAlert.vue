@@ -132,9 +132,9 @@ export default {
 <style lang="scss" scoped>
 .find-people-alert-container {
   width: 100%;
-  height: calc(100% - 48px);
+  height: calc(100vh - 48px);
   .result {
-    height: calc(100% - 130px);
+    height: calc(100vh - 130px);
     overflow: scroll;
   }
 }

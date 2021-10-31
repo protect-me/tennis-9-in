@@ -130,10 +130,10 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-container {
-  height: calc(100% - 48px);
+  height: calc(100vh - 48px);
   .v-tabs-items {
     padding: 0px 2px;
-    height: calc(100% - 180px);
+    height: calc(100vh - 180px);
     overflow: scroll;
     .tab-item {
       padding-top: 10px;

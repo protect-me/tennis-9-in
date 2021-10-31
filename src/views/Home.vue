@@ -100,7 +100,7 @@ export default {
 
 <style scoped lang="scss" scoped>
 .home-container {
-  height: calc(100% - 48px);
+  height: calc(100vh - 48px);
   overflow: scroll;
 }
 .main-img {
