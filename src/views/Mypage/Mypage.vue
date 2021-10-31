@@ -278,8 +278,8 @@ export default {
   height: calc(var(--customVH, 1vh) * 100 - 48px);
 }
 #dark-mode-toggle {
-  bottom: 0;
   right: 0;
+  bottom: calc((1vh - var(--customVH, 1vh)) * 100 / 2);
   position: absolute;
   margin: 16px;
 }

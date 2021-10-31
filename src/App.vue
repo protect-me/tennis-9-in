@@ -41,21 +41,7 @@ export default {
         this.$vuetify.theme.dark = false
       }
     }
-    // this.setHeight()
   },
-  // methods: {
-  //   setHeight() {
-  //     let customVH = window.innerHeight * 0.01
-  //     document.documentElement.style.setProperty('--customVH', `${customVH}px`)
-  //     window.addEventListener('resize', () => {
-  //       let customVH = window.innerHeight * 0.01
-  //       document.documentElement.style.setProperty(
-  //         '--customVH',
-  //         `${customVH}px`,
-  //       )
-  //     })
-  //   },
-  // },
 }
 </script>
 
@@ -68,8 +54,8 @@ export default {
 .custom-alert {
   width: calc(100% - 24px);
   padding: 0 12px;
-  bottom: 0px;
   left: 0px;
+  bottom: calc((1vh - var(--customVH, 1vh)) * 100 / 2);
   position: absolute;
   z-index: 999;
 }
