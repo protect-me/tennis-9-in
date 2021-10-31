@@ -331,10 +331,10 @@ exports.scheduledFunctionForMeta = functions.pubsub
 
       const id = String(Date.now())
       const refRecords = fdb.collection('records').doc(id)
-      await refRecords.collection('user').doc(id).set(metaUserData)
-      await refRecords.collection('court').doc(id).set(metaCourtData)
-      await refRecords.collection('visit').doc(id).set(metaVisitData)
-      await refRecords.collection('findPeople').doc(id).set(metaFindPeopleData)
+      await refRecords.set(metaUserData)
+      await refRecords.update(metaCourtData)
+      await refRecords.update(metaVisitData)
+      await refRecords.update(metaFindPeopleData)
     } catch (err) {
       console.log(err)
     }
