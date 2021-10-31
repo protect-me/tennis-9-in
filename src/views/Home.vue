@@ -68,8 +68,6 @@ export default {
   name: 'Home',
   mounted() {
     this.$store.dispatch('checkVisitCount', 'home')
-    console.log(this.$route.name)
-    console.log(this.$route.fullPath)
   },
   methods: {
     checkVisitCount(pageName) {
