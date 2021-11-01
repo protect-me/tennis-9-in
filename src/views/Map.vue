@@ -174,12 +174,11 @@ export default {
 <style lang="scss">
 .map-container {
   width: 100%;
-  height: 100%;
+  height: calc(var(--customVH, 1vh) * 100 - 48px);
 }
 #map {
-  margin-top: 5px;
-  width: calc(100% - 5px);
   height: 100%;
+  width: 100%;
   .customoverlay {
     .customoverlay-count {
       border: 2px solid rgba(55, 124, 33);

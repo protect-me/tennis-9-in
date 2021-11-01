@@ -211,7 +211,7 @@ export default {
   }
 }
 .court-list-container.fullscreen {
-  height: 100vh;
+  height: calc(var(--customVH, 1vh) * 100);
 }
 td {
   padding: 0px 8px !important;

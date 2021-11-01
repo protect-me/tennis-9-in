@@ -112,6 +112,8 @@ export default new Vuex.Store({
           .orderBy('startTime')
           .onSnapshot((snapshot) => {
             if (snapshot.empty) {
+              console.log('data empty')
+              commit('updateState', { loading: false })
               return
             }
             schedules = snapshot.docs.map((value) => {

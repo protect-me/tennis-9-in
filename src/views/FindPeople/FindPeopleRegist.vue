@@ -658,7 +658,7 @@ export default {
   }
 }
 .find-people-regist-container.edit-mode {
-  height: 100vh;
+  height: calc(var(--customVH, 1vh) * 100);
   .find-people-regist-content {
     height: calc(var(--customVH, 1vh) * 100 - 12px);
     overflow: scroll;
