@@ -218,8 +218,9 @@ td {
 }
 #report {
   bottom: calc((1vh - var(--customVH, 1vh)) * 100);
-  right: 0;
   position: absolute;
   margin: 16px;
+  left: 50%;
+  transform: translate(-100%, 0%);
 }
 </style>
