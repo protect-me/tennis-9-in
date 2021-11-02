@@ -62,7 +62,8 @@ export default {
   width: calc(100% - 24px);
   padding: 0 12px;
   left: 0px;
-  bottom: calc((1vh - var(--vh, 1vh)) * 100);
+  bottom: 0;
+  /* bottom: calc((1vh - var(--vh, 1vh)) * 100); */
   position: absolute;
   z-index: 999;
 }

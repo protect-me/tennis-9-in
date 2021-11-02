@@ -279,7 +279,7 @@ export default {
 }
 #dark-mode-toggle {
   right: 0;
-  bottom: calc((1vh - var(--vh, 1vh)) * 100);
+  bottom: 0;
   position: absolute;
   margin: 16px;
 }
