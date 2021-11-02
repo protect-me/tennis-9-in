@@ -47,6 +47,7 @@ export default {
 
 <style lang="scss">
 #app-container {
+  border: 1px solid blue;
   height: calc(var(--vh, 1vh) * 100);
   overflow: scroll;
 }
