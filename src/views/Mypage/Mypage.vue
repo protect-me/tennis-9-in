@@ -275,7 +275,6 @@ export default {
 <style lang="scss" scoped>
 .mypage-container {
   width: 100%;
-  border: 1px solid gold;
   height: calc(var(--vh, 1vh) * 100 - 48px);
 }
 #dark-mode-toggle {

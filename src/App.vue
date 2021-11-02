@@ -47,9 +47,11 @@ export default {
 
 <style lang="scss">
 #app-container {
-  border: 1px solid blue;
   height: calc(var(--vh, 1vh) * 100);
   overflow: scroll;
+  .v-application--wrap {
+    min-height: calc(var(--vh, 1vh) * 100) !important;
+  }
 }
 .v-overlay--active {
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3);
