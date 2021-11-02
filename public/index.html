@@ -10,7 +10,21 @@
     />
     <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <!-- <title><%= htmlWebpackPlugin.options.title %></title> -->
-    <title>테니스구인</title>
+    <title>테니스구인 | tennis9in</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="테니스구인 | tennis9in" />
+    <meta property="og:title" content="테니스구인 | tennis9in" />
+    <meta
+      property="og:description"
+      content="테니스 게스트 모집 | 경기장 지도"
+    />
+    <meta
+      property="og:image"
+      content="https://media.vlpt.us/images/protect-me/post/0677140c-8f07-4202-a560-d9191b079ee9/tennis_meta_og_img.jpeg"
+    />
+    <meta property="og:url" content="https://tennis9in.netlify.app/" />
+
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
@@ -19,6 +33,11 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css"
     />
+    <style>
+      body {
+        height: calc(var(--customVH, 1vh) * 100);
+      }
+    </style>
   </head>
   <body>
     <noscript>
@@ -28,7 +47,6 @@
       </strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
     <script>
       let customVH = window.innerHeight * 0.01
       document.documentElement.style.setProperty('--customVH', customVH + 'px')

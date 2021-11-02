@@ -1,7 +1,5 @@
 <template>
   <div style="width: 100%;">
-    <!-- outlined -->
-    <!-- text -->
     <v-alert
       border="left"
       transition="scale-transition"
@@ -9,7 +7,6 @@
       color="primary"
       style="color: white;"
     >
-      <!-- colored-border -->
       <div
         style="
           display: flex;
