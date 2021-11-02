@@ -46,6 +46,10 @@ export default {
 </script>
 
 <style lang="scss">
+.app-container {
+  height: calc(var(--customVH, 1vh) * 100);
+  overflow: scroll;
+}
 .v-overlay--active {
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3);
   -webkit-backdrop-filter: blur(5px);
