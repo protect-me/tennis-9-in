@@ -34,14 +34,13 @@
       href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css"
     />
     <style>
-      :root {
-        --customVH: 100%;
+      html {
+        height: calc(var(--vh, 1vh) * 100);
       }
-
-      html,
       body {
-        height: 100vh;
-        height: calc(var(--customVH, 1vh) * 100);
+        margin: 0;
+        padding: 0;
+        height: calc(var(--vh, 1vh) * 100);
       }
     </style>
   </head>
@@ -54,14 +53,11 @@
     </noscript>
     <div id="app"></div>
     <script>
-      let customVH = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--customVH', customVH + 'px')
+      let innerHeight = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', innerHeight + 'px')
       window.addEventListener('resize', () => {
-        let customVH = window.innerHeight * 0.01
-        document.documentElement.style.setProperty(
-          '--customVH',
-          customVH + 'px',
-        )
+        let innerHeight = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', innerHeight + 'px')
       })
     </script>
   </body>

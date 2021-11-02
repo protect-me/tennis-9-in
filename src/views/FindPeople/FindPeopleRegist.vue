@@ -635,11 +635,11 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-regist-container {
-  height: calc(var(--customVH, 1vh) * 100 - 48px);
+  height: calc(var(--vh, 1vh) * 100 - 48px);
   display: flex;
   flex-direction: column;
   .find-people-regist-content {
-    height: calc(var(--customVH, 1vh) * 100 - 180px);
+    height: calc(var(--vh, 1vh) * 100 - 180px);
     overflow: scroll;
     .custom-box {
       border: 1px solid rgba(0, 0, 0, 0.42) !important;
@@ -658,9 +658,9 @@ export default {
   }
 }
 .find-people-regist-container.edit-mode {
-  height: calc(var(--customVH, 1vh) * 100);
+  height: calc(var(--vh, 1vh) * 100);
   .find-people-regist-content {
-    height: calc(var(--customVH, 1vh) * 100 - 12px);
+    height: calc(var(--vh, 1vh) * 100 - 12px);
     overflow: scroll;
   }
 }

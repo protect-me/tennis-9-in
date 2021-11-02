@@ -354,11 +354,11 @@ export default {
 <style lang="scss" scoped>
 .court-regist-container {
   width: 100%;
-  height: calc(var(--customVH, 1vh) * 100 - 48px);
+  height: calc(var(--vh, 1vh) * 100 - 48px);
   display: flex;
   flex-direction: column;
   .court-regist-content {
-    height: calc(var(--customVH, 1vh) * 100 - 180px);
+    height: calc(var(--vh, 1vh) * 100 - 180px);
     overflow: scroll;
   }
   .compelete-btn {

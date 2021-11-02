@@ -275,11 +275,11 @@ export default {
 <style lang="scss" scoped>
 .mypage-container {
   width: 100%;
-  height: calc(var(--customVH, 1vh) * 100 - 48px);
+  height: calc(var(--vh, 1vh) * 100 - 48px);
 }
 #dark-mode-toggle {
   right: 0;
-  bottom: calc((1vh - var(--customVH, 1vh)) * 100);
+  bottom: calc((1vh - var(--vh, 1vh)) * 100);
   position: absolute;
   margin: 16px;
 }

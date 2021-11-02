@@ -156,11 +156,11 @@ export default {
 <style lang="scss" scoped>
 .court-report-container {
   width: 100%;
-  height: calc(var(--customVH, 1vh) * 100 - 48px);
+  height: calc(var(--vh, 1vh) * 100 - 48px);
   display: flex;
   flex-direction: column;
   .court-report-content {
-    height: calc(var(--customVH, 1vh) * 100 - 130px);
+    height: calc(var(--vh, 1vh) * 100 - 130px);
     #textarea {
       height: 300px;
     }

@@ -201,23 +201,23 @@ export default {
 <style lang="scss">
 .court-list-container {
   width: 100%;
-  height: calc(var(--customVH, 1vh) * 100 - 48px);
+  height: calc(var(--vh, 1vh) * 100 - 48px);
   display: flex;
   flex-direction: column;
   .court-list-content {
     width: 100%;
-    height: calc(var(--customVH, 1vh) * 100 - 134px);
+    height: calc(var(--vh, 1vh) * 100 - 134px);
     overflow: scroll;
   }
 }
 .court-list-container.fullscreen {
-  height: calc(var(--customVH, 1vh) * 100);
+  height: calc(var(--vh, 1vh) * 100);
 }
 td {
   padding: 0px 8px !important;
 }
 #report {
-  bottom: calc((1vh - var(--customVH, 1vh)) * 100);
+  bottom: calc((1vh - var(--vh, 1vh)) * 100);
   position: absolute;
   margin: 16px;
   left: 50%;

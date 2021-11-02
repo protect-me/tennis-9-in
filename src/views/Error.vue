@@ -20,6 +20,6 @@ export default {}
 
 <style>
 .error-container {
-  height: calc(var(--customVH, 1vh) * 100 - 48px);
+  height: calc(var(--vh, 1vh) * 100 - 48px);
 }
 </style>

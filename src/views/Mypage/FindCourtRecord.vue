@@ -228,10 +228,10 @@ export default {
 
 <style lang="scss" scoped>
 .find-people-record-container {
-  height: calc(var(--customVH, 1vh) * 100 - 48px);
+  height: calc(var(--vh, 1vh) * 100 - 48px);
   .v-tabs-items {
     padding: 0px 2px;
-    height: calc(var(--customVH, 1vh) * 100 - 180px);
+    height: calc(var(--vh, 1vh) * 100 - 180px);
     overflow: scroll;
     .tab-item {
       margin-top: 10px;
