@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss">
-.app-container {
+#app-container {
   height: calc(var(--vh, 1vh) * 100);
   overflow: scroll;
 }
