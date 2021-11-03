@@ -1,6 +1,21 @@
 <template>
-  <v-container>
-    <canvas id="find-people-chart" width="100vw" height="100"></canvas>
+  <v-container class="admin-container">
+    <v-card>
+      <v-card-title>
+        게스트 모집
+      </v-card-title>
+      <v-card-text>
+        <canvas id="find-people-chart" width="100vw" height="100"></canvas>
+      </v-card-text>
+    </v-card>
+    <v-card>
+      <v-card-title>
+        회원 관리
+      </v-card-title>
+      <v-card-text>
+        <canvas id="users-chart" width="100vw" height="100"></canvas>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
@@ -16,10 +31,10 @@ export default {
     return {
       loading: true,
       records: null,
-      recordsUser: null,
+      recordsUsers: {},
       recordsFindPeople: {},
-      recordsCourt: null,
-      recordsVisit: null,
+      recordsCourt: {},
+      recordsVisit: {},
       labels: [],
     }
   },
@@ -31,13 +46,13 @@ export default {
           .firestore()
           .collection('records')
           .get()
-
         this.records = snapshot.docs.map((doc) => {
           const id = doc.id
           this.labels.push(id)
           return { id, ...doc.data() }
         })
         this.initDataFindPeople()
+        this.initDataUsers()
       } catch (err) {
         console.log('데이터 로드 실패', err)
       } finally {
@@ -62,22 +77,22 @@ export default {
         {
           label: 'Open',
           data: [],
-          backgroundColor: ['red'],
-          borderColor: ['red'],
+          backgroundColor: ['tomato'],
+          borderColor: ['tomato'],
           borderWidth: 3,
         },
         {
           label: 'Close',
           data: [],
-          backgroundColor: ['green'],
-          borderColor: ['green'],
+          backgroundColor: ['yellowgreen'],
+          borderColor: ['yellowgreen'],
           borderWidth: 3,
         },
         {
           label: 'Complete',
           data: [],
-          backgroundColor: ['blue'],
-          borderColor: ['blue'],
+          backgroundColor: ['royalblue'],
+          borderColor: ['royalblue'],
           borderWidth: 3,
         },
         {
@@ -102,6 +117,42 @@ export default {
       })
       this.createChart('find-people-chart', this.recordsFindPeople)
     },
+    initDataUsers() {
+      this.recordsUsers.type = 'line'
+      this.recordsUsers.data = { labels: [], datasets: [] }
+      this.recordsUsers.options = {
+        responsive: true,
+        lineTension: 0,
+        scales: {},
+      }
+      this.recordsUsers.data.labels = this.labels.slice().map((label) => {
+        const date = new Date(Number(label))
+        return `${date.getFullYear()}/${
+          date.getMonth() + 1
+        }/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+      })
+      this.recordsUsers.data.datasets = [
+        {
+          label: 'create',
+          data: [],
+          backgroundColor: ['royalblue'],
+          borderColor: ['royalblue'],
+          borderWidth: 3,
+        },
+        {
+          label: 'delete',
+          data: [],
+          backgroundColor: ['tomato'],
+          borderColor: ['tomato'],
+          borderWidth: 3,
+        },
+      ]
+      this.records.forEach((record) => {
+        this.recordsUsers.data.datasets[0].data.push(record.createUser)
+        this.recordsUsers.data.datasets[1].data.push(record.deleteUser)
+      })
+      this.createChart('users-chart', this.recordsUsers)
+    },
     createChart(charId, chartData) {
       const ctx = document.getElementById(charId)
       const myChart = new Chart(ctx, {
@@ -114,4 +165,9 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.admin-container {
+  height: calc(var(--vh, 1vh) * 100 - 48px);
+  overflow: scroll;
+}
+</style>
