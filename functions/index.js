@@ -92,6 +92,7 @@ exports.createApplicants = functions.firestore
           scheduleId: context.params.scheduleId,
           applicantsId: context.params.applicantsId,
           createdAt: createdAt,
+          timestamp: Number(id),
           alertStatus: 1,
         }, // 신규 게스트 참여 요청 알림
       )
@@ -127,7 +128,7 @@ exports.deleteApplicants = functions.firestore
       // update 참여 신청자의 참여 요청 리스트
       batch.update(refApplicant, {
         applicationList: admin.firestore.FieldValue.arrayRemove(
-          context.params.applicantsId,
+          context.params.scheduleId,
         ),
       })
       // update 방장의 알림 On
@@ -141,6 +142,7 @@ exports.deleteApplicants = functions.firestore
         scheduleId: context.params.scheduleId,
         applicantsId: context.params.applicantsId,
         createdAt: createdAt,
+        timestamp: Number(id),
         alertStatus: 2,
       })
       // meta update
@@ -204,6 +206,7 @@ exports.updateParticipants = functions.firestore
         scheduleId: context.params.scheduleId,
         applicantsId: guest,
         createdAt: createdAt,
+        timestamp: Number(id),
         alertStatus: alertStatus,
       })
       // meta update

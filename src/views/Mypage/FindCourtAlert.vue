@@ -10,6 +10,11 @@
     <v-divider class="my-3"></v-divider>
 
     <div class="result">
+      <v-card class="mb-2">
+        <v-card-subtitle>
+          <span>Notice. 최근 일주일 이내의 데이터만 노출됩니다 🎾</span>
+        </v-card-subtitle>
+      </v-card>
       <FindPeopleCard
         v-for="(schedule, index) in schedules"
         :key="index"
@@ -63,7 +68,7 @@ export default {
           .collection('users')
           .doc(this.fireUser.uid)
           .collection('FindCourtAlert')
-          .orderBy('createdAt', 'desc')
+          .orderBy('timestamp', 'desc')
           .get()
         const alertScheduleIdList = alertList.docs.map(
           (value) => value.data().scheduleId,

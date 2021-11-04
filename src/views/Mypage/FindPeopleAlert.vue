@@ -10,6 +10,11 @@
     <v-divider class="my-3"></v-divider>
 
     <div class="result">
+      <v-card class="mb-2">
+        <v-card-subtitle>
+          <span>Notice. 최근 일주일 이내의 데이터만 노출됩니다 🎾</span>
+        </v-card-subtitle>
+      </v-card>
       <FindPeopleCard
         v-for="(schedule, index) in schedules"
         :key="index"
@@ -57,14 +62,17 @@ export default {
       this.$router.push({ name: 'Mypage' })
     },
     async initData() {
+      const limit = new Date().getTime().toString() - 604800000
       try {
         const alertList = await this.$firebase
           .firestore()
           .collection('users')
           .doc(this.fireUser.uid)
           .collection('FindPeopleAlert')
-          .orderBy('createdAt', 'desc')
+          .where('timestamp', '>=', limit)
+          .orderBy('timestamp', 'desc')
           .get()
+        if (alertList.empty) return
         const alertScheduleIdList = alertList.docs.map(
           (value) => value.data().scheduleId,
         )
