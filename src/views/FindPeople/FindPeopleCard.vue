@@ -26,6 +26,9 @@
           {{ new Date(createdAt.toDate()).toDateString() }} -
           {{ new Date(createdAt.toDate()).toLocaleTimeString() }}
         </div>
+        <v-btn>
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       </v-card-text>
     </v-card>
     <v-card class="find-people-card-container" @click="goToDetail">
