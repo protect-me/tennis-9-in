@@ -136,8 +136,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   props: {
     schedule: {
@@ -150,7 +148,7 @@ export default {
     },
     alertId: {
       type: String,
-      default: 0,
+      default: '0',
     },
     alertStatus: {
       type: Number,

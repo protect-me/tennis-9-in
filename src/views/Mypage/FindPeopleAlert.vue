@@ -23,7 +23,7 @@
         :alertStatus="schedule.alertStatus"
         :createdAt="schedule.alertCreatedAt"
         @deleteAelrtBtnClicked="
-          deleteAlert(schedule.status, schedule.alertId, index)
+          deleteAlert(schedule.alertStatus, schedule.alertId, index)
         "
       ></FindPeopleCard>
       <v-card v-if="schedules && schedules.length === 0" flat>
