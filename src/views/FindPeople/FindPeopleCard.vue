@@ -19,13 +19,15 @@
             outlined
             color="error"
           >
-            <span>{{ alertStatus === 2 ? '참가 요청 취소' : '방출' }}</span>
+            <span>{{ alertStatus === 2 ? '요청 취소' : '방출' }}</span>
           </v-chip>
         </div>
         <div style="margin-top: 6px;">
-          {{ new Date(createdAt.toDate()).toDateString() }} -
-          {{ new Date(createdAt.toDate()).toLocaleTimeString() }}
+          {{ alertDate }}
         </div>
+        <v-btn icon @click="deleteAelrtBtnClicked">
+          <v-icon small>mdi-close</v-icon>
+        </v-btn>
       </v-card-text>
     </v-card>
     <v-card class="find-people-card-container" @click="goToDetail">
@@ -144,6 +146,10 @@ export default {
       type: String,
       default: 'list', // list || detail
     },
+    alertId: {
+      type: String,
+      default: '0',
+    },
     alertStatus: {
       type: Number,
       default: 0,
@@ -165,12 +171,20 @@ export default {
         dayOfWeek: dayOfWeek,
       }
     },
+    alertDate() {
+      const date = new Date(this.createdAt.toDate())
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}
+          ${date.getHours()}:${date.getMinutes()}`
+    },
   },
   methods: {
     async goToDetail() {
       if (this.mode === 'detail') return
       await this.$store.dispatch('setSchedule', this.schedule)
       this.$router.push(`/findpeopledetail/${this.schedule.scheduleId}`)
+    },
+    async deleteAelrtBtnClicked() {
+      this.$emit('deleteAelrtBtnClicked')
     },
   },
 }

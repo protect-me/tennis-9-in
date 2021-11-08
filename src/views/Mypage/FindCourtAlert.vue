@@ -19,8 +19,12 @@
         v-for="(schedule, index) in schedules"
         :key="index"
         :schedule="schedule"
+        :alertId="schedule.alertId"
         :alertStatus="schedule.alertStatus"
         :createdAt="schedule.alertCreatedAt"
+        @deleteAelrtBtnClicked="
+          deleteAlert(schedule.alertStatus, schedule.alertId, index)
+        "
       ></FindPeopleCard>
       <v-card v-if="schedules && schedules.length === 0" flat>
         <v-card-text class="mt-12" align="center">
@@ -33,6 +37,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { EventBus } from '@/utils/EventBus'
 import TitleWithButton from '../../components/TitleWithButton'
 import FindPeopleCard from '../FindPeople/FindPeopleCard'
 
@@ -109,7 +114,7 @@ export default {
           const id = value.id
           const item = value.data()
           return {
-            id: id,
+            alertId: id,
             applicantsId: item.applicantsId,
             alertCreatedAt: item.createdAt,
             alertStatus: item.alertStatus,
@@ -129,6 +134,34 @@ export default {
         })
         console.log('영입/방출 알림 데이터 로드 실패', err)
       }
+    },
+    async deleteAlert(alertStatus, alertId, alertIndex) {
+      console.log('here', alertStatus, alertId, alertIndex)
+
+      await this.$store.dispatch('openConfirm', {
+        message: '알림을 삭제하시겠어요?',
+      })
+      EventBus.$once('confirmReturn', async (answer) => {
+        if (answer) {
+          try {
+            const ref = this.$firebase
+              .firestore()
+              .collection('users')
+              .doc(this.fireUser.uid)
+            let flag = ''
+            if ([1, 2].includes(alertStatus)) {
+              flag = 'FindPeopleAlert'
+            } else if ([3, 4].includes(alertStatus)) {
+              flag = 'FindCourtAlert'
+            }
+            console.log(flag, this.fireUser.uid)
+            await ref.collection(flag).doc(alertId).delete()
+            this.schedules.splice(alertIndex, 1)
+          } catch (err) {
+            console.log('알림 삭제 실패', err)
+          }
+        }
+      })
     },
   },
 }
