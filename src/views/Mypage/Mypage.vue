@@ -197,6 +197,11 @@ export default {
           to: '/operationpolicy',
         },
         {
+          text: '개발자 정보',
+          icon: 'mdi-account-hard-hat',
+          to: '/developerinfo',
+        },
+        {
           text: '피드백',
           icon: 'mdi-bullhorn-outline',
           to: '/report',
