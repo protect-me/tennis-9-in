@@ -48,7 +48,8 @@ export default {
 <style lang="scss">
 #app-container {
   height: calc(var(--vh, 1vh) * 100);
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
   .v-application--wrap {
     min-height: calc(var(--vh, 1vh) * 100) !important;
   }

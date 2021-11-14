@@ -19,7 +19,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <!-- <v-btn icon>
         <router-link
           to="/findpeoplehome"
           class="white--text"
@@ -88,13 +88,64 @@
             mdi-account-circle-outline
           </v-icon>
         </router-link>
-      </v-btn>
+      </v-btn> -->
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      :bottom="false"
+      temporary
+      right
+    >
+      <v-list nav>
+        <v-list-item
+          v-for="item in items"
+          :key="item.title"
+          :to="item.link"
+          link
+          active-class="primary--text"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      drawer: false,
+      group: null,
+      items: [
+        {
+          title: '구인',
+          icon: 'mdi-account-search-outline',
+          link: '/findpeoplehome',
+        },
+        { title: '지도', icon: 'mdi-map-search-outline', link: '/map' },
+        { title: '경기장', icon: 'mdi-stadium', link: '/courtlist' },
+        {
+          title: '마이페이지',
+          icon: 'mdi-account-circle-outline',
+          link: '/mypage',
+        },
+      ],
+    }
+  },
+  watch: {
+    group() {
+      this.drawer = false
+    },
+  },
   methods: {
     checkRoute(routeArray) {
       if (routeArray.includes(this.$route.name)) {
