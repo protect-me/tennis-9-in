@@ -124,18 +124,6 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <v-btn
-      id="dark-mode-toggle"
-      elevation="2"
-      fab
-      width="50"
-      height="50"
-      @click="toggleDarkMode"
-    >
-      <div style="min-width: 30px; font-size: 30px;">
-        {{ $vuetify.theme.dark ? '🌕' : '🌑' }}
-      </div>
-    </v-btn>
   </v-container>
 </template>
 
@@ -263,13 +251,6 @@ export default {
         }
       })
     },
-    toggleDarkMode() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-      localStorage.setItem(
-        'Tennis9InDarkTheme',
-        this.$vuetify.theme.dark.toString(),
-      )
-    },
     goToAdmin() {
       this.$router.push({ name: 'Admin' })
     },
@@ -281,11 +262,5 @@ export default {
 .mypage-container {
   width: 100%;
   height: calc(var(--vh, 1vh) * 100 - 48px);
-}
-#dark-mode-toggle {
-  right: 0;
-  bottom: 0;
-  position: absolute;
-  margin: 16px;
 }
 </style>

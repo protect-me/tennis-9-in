@@ -115,6 +115,18 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-btn
+        id="dark-mode-toggle"
+        elevation="2"
+        fab
+        width="50"
+        height="50"
+        @click="toggleDarkMode"
+      >
+        <div style="min-width: 30px; font-size: 30px;">
+          {{ $vuetify.theme.dark ? '🌕' : '🌑' }}
+        </div>
+      </v-btn>
     </v-navigation-drawer>
   </div>
 </template>
@@ -161,6 +173,13 @@ export default {
         return false
       }
     },
+    toggleDarkMode() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+      localStorage.setItem(
+        'Tennis9InDarkTheme',
+        this.$vuetify.theme.dark.toString(),
+      )
+    },
   },
 }
 </script>
@@ -182,5 +201,11 @@ export default {
 }
 .header-title-active {
   color: #ecb558;
+}
+#dark-mode-toggle {
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  margin: 16px;
 }
 </style>
