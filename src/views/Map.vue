@@ -14,7 +14,7 @@ export default {
       ? this.initMap()
       : this.addKakaoMapScript()
     this.$nextTick(async function () {
-      this.initData()
+      await this.initData()
     })
   },
   computed: {
