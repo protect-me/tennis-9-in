@@ -32,7 +32,7 @@
             </div>
           </div>
 
-          <div class="detail-row" style="">
+          <div class="detail-row">
             <div>코트({{ court.courtTypes && court.courtTypes.length }})</div>
             <div>
               <v-chip
@@ -53,7 +53,7 @@
 
           <v-divider class="my-1"></v-divider>
 
-          <div class="detail-row">
+          <div>
             {{ court.memo }}
           </div>
         </v-card-text>
