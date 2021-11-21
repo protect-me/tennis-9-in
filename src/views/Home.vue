@@ -9,6 +9,32 @@
     </div>
     <v-divider class="mt-1 mb-3"></v-divider>
 
+    <v-card class="mb-2">
+      <v-card-text style="display: flex; justify-content: space-between;">
+        <div class="left" style="width: 30%;">
+          <a href="https://open.kakao.com/o/gjNjPXHd?rt=O009" target="_blank">
+            <img
+              :src="require('../assets/tennis9in_talk_qr.png')"
+              alt="tennis9in_talk_qr"
+              style="width: 100%;"
+            />
+          </a>
+        </div>
+        <div class="right ml-2" style="width: 65%;">
+          <div class="my-2" style="font-weight: 700;">
+            tennis9in 채팅방
+          </div>
+          <div>
+            <div>
+              QR코드를 스캔하거나 터치하시면
+              <br />
+              채팅방으로 연결됩니다 🎾
+            </div>
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
+
     <v-card class="mb-2" nav :to="'FindPeopleHome'">
       <v-card-subtitle>
         <v-icon class="mr-3">mdi-account-search-outline</v-icon>
