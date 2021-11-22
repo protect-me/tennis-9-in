@@ -99,6 +99,19 @@
       right
     >
       <v-list nav>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="text-h6 header-title">
+              TENNIS9IN
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              테니스 게스트 구인
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider></v-divider>
+
         <v-list-item
           v-for="item in items"
           :key="item.title"
